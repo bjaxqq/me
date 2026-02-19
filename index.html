@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brooks Jackson</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><g stroke=%22%23fff%22 stroke-width=%221.5%22 stroke-dasharray=%223,3%22 fill=%22none%22 opacity=%220.6%22><line x1=%22100%22 y1=%22155%22 x2=%22100%22 y2=%2275%22 /><line x1=%22100%22 y1=%22155%22 x2=%2235%22 y2=%22118%22 /><line x1=%22100%22 y1=%22155%22 x2=%22165%22 y2=%22118%22 /></g><g stroke=%22%23fff%22 stroke-width=%222%22 stroke-linejoin=%22round%22 stroke-linecap=%22round%22><path d=%22M 100 25 L 165 62 L 100 100 L 35 62 Z%22 fill=%22%234d8abb%22 /><path d=%22M 35 62 L 100 100 L 100 175 L 35 138 Z%22 fill=%22%23003e70%22 /><path d=%22M 165 62 L 100 100 L 100 175 L 165 138 Z%22 fill=%22%2300589f%22 /></g></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #faf9f8;
+            --ink: #1a1a1a;
+            --ink-muted: #8c8c8c;
+            --serif: "Newsreader", serif;
+            --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg);
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8vh 80px;
+            font-family: var(--serif);
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            transition: opacity 0.5s ease;
+        }
+
+        header {
+            max-width: 500px;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 54px;
+            font-weight: 300;
+            font-style: italic;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            cursor: pointer;
+        }
+
+        .bio {
+            font-size: 20px;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--ink-muted);
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            width: 100%;
+            flex: 1;
+            align-items: center;
+        }
+
+        .view-layer {
+            grid-column: 1;
+            grid-row: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            transition: opacity var(--transition), transform var(--transition);
+        }
+
+        .view-active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .view-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            pointer-events: none;
+        }
+
+        .view-hidden {
+            opacity: 0;
+            transform: translateX(40px);
+            pointer-events: none;
+        }
+
+        .project-link, .presence a {
+            text-decoration: none;
+            color: var(--ink);
+            position: relative;
+            transition: color 0.4s ease;
+        }
+
+        .project-link {
+            font-size: 32px;
+            font-weight: 300;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        .presence a {
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        .project-link::after, .presence a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--ink-muted);
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-link:hover, .presence a:hover {
+            color: var(--ink-muted);
+        }
+
+        .project-link:hover::after, .presence a:hover::after {
+            width: 100%;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .meta-text {
+            font-size: 16px;
+            font-style: italic;
+            color: var(--ink-muted);
+        }
+
+        .presence {
+            display: flex;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 40px 32px; }
+            h1 { font-size: 42px; }
+            .presence { flex-direction: column; gap: 12px; text-align: right; }
+            .presence a::after { left: auto; right: 0; }
+            footer { align-items: flex-end; }
+            .meta-text { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="name-header">Brooks Jackson</h1>
+        <p class="bio">Full-stack developer. <br>Focused on AI-driven systems and technical excellence. <br>Bridging scalable back-end logic with intuitive interfaces. <br>Dedicated to optimized codebases through precise, performant code.</p>
+    </header>
+
+    <main>
+        <div id="categories-list" class="view-layer view-active">
+            <button class="project-link" id="projects-trigger">Projects</button>
+            <a href="photography.html" class="project-link" id="photo-link">Photography</a>
+        </div>
+
+        <div id="projects-list" class="view-layer view-hidden">
+            <button class="project-link" id="back-trigger">Back</button>
+            <a href="https://github.com/bjaxqq/stereotweet" class="project-link" target="_blank" rel="noopener noreferrer">Stereotweet</a>
+            <a href="https://github.com/bjaxqq/SER225" class="project-link" target="_blank" rel="noopener noreferrer">Weaver's Wrath</a>
+            <a href="https://github.com/bjaxqq/resonance" class="project-link" target="_blank" rel="noopener noreferrer">Resonance</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="meta-text">bjaxqq &middot; 2026</div>
+        <nav class="presence">
+            <a href="https://www.linkedin.com/in/brooks-jackson/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://github.com/bjaxqq" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="#" target="_blank" rel="noopener noreferrer">Resume</a>
+            <a href="mailto:brooksjackson@proton.me">Email</a>
+        </nav>
+    </footer>
+
+    <script>
+        const categoriesList = document.getElementById('categories-list');
+        const projectsList = document.getElementById('projects-list');
+        const projectsTrigger = document.getElementById('projects-trigger');
+        const backTrigger = document.getElementById('back-trigger');
+        const nameHeader = document.getElementById('name-header');
+        const photoLink = document.getElementById('photo-link');
+
+        function showProjects() {
+            categoriesList.classList.remove('view-active');
+            categoriesList.classList.add('view-left');
+            projectsList.classList.remove('view-hidden');
+            projectsList.classList.add('view-active');
+        }
+
+        function showCategories() {
+            projectsList.classList.remove('view-active');
+            projectsList.classList.add('view-hidden');
+            categoriesList.classList.remove('view-left');
+            categoriesList.classList.add('view-active');
+        }
+
+        projectsTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            showProjects();
+        });
+
+        backTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            showCategories();
+        });
+
+        nameHeader.addEventListener('click', () => {
+            showCategories();
+        });
+
+        photoLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = 'photography.html';
+            }, 500);
+        });
+    </script>
+</body>
+</html>

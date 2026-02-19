@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brooks Jackson</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><g stroke=%22%23000%22 stroke-width=%221.5%22 stroke-dasharray=%223,3%22 fill=%22none%22 opacity=%220.6%22><line x1=%22100%22 y1=%22155%22 x2=%22100%22 y2=%2275%22 /><line x1=%22100%22 y1=%22155%22 x2=%2235%22 y2=%22118%22 /><line x1=%22100%22 y1=%22155%22 x2=%22165%22 y2=%22118%22 /></g><g stroke=%22%23000%22 stroke-width=%222%22 stroke-linejoin=%22round%22 stroke-linecap=%22round%22><path d=%22M 100 25 L 165 62 L 100 100 L 35 62 Z%22 fill=%22%234d8abb%22 /><path d=%22M 35 62 L 100 100 L 100 175 L 35 138 Z%22 fill=%22%23003e70%22 /><path d=%22M 165 62 L 100 100 L 100 175 L 165 138 Z%22 fill=%22%2300589f%22 /></g></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --ink: #1a1a1a;
+            --ink-muted: #8c8c8c;
+            --transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--bg);
+            font-family: "Newsreader", serif;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            transition: opacity 0.5s ease;
+        }
+
+        .canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        .gallery-img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            max-width: 70vw; 
+            max-height: 70vh;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+            transition: opacity var(--transition), transform var(--transition);
+            will-change: transform, opacity;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+        }
+
+        .no-transition {
+            transition: none !important;
+        }
+
+        .view-active { 
+            opacity: 1; 
+            transform: translate(-50%, -50%); 
+        }
+        
+        .view-left { 
+            opacity: 0; 
+            transform: translate(calc(-50% - 60px), -50%); 
+        }
+        
+        .view-right { 
+            opacity: 0; 
+            transform: translate(calc(-50% + 60px), -50%); 
+        }
+
+        .bottom-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+            z-index: 20;
+        }
+
+        .project-link {
+            font-size: 32px;
+            font-weight: 300;
+            font-style: normal;
+            color: var(--ink);
+            position: relative;
+            transition: color 0.4s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .project-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--ink-muted);
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-link:hover {
+            color: var(--ink-muted);
+        }
+
+        .project-link:hover::after {
+            width: 100%;
+        }
+
+        #close-btn {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            z-index: 40;
+        }
+
+        .nav-zone {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            z-index: 5;
+            cursor: pointer;
+        }
+        
+        .nav-left { left: 0; }
+        .nav-right { right: 0; }
+
+        .exit-trigger {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            height: 50%;
+            z-index: 30;
+            cursor: default;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-img {
+                max-width: 85vw;
+                max-height: 80vh;
+            }
+            .bottom-controls {
+                bottom: 24px;
+                gap: 24px;
+            }
+            .project-link {
+                font-size: 24px;
+            }
+            #close-btn {
+                top: 24px;
+                right: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="project-link" id="close-btn">X</a>
+
+    <div class="nav-zone nav-left" id="prev-zone"></div>
+    <div class="nav-zone nav-right" id="next-zone"></div>
+    
+    <a href="index.html" class="exit-trigger" id="center-exit"></a>
+
+    <div class="canvas">
+        <img id="img-1" class="gallery-img" src="" alt="">
+        <img id="img-2" class="gallery-img" src="" alt="">
+    </div>
+
+    <div class="bottom-controls">
+        <button class="project-link" id="btn-prev">Previous</button>
+        <button class="project-link" id="btn-next">Next</button>
+    </div>
+
+    <script>
+        const library = [
+            { "url": "images/DSCF7363.JPG", "date": "2026-02-03" },
+            { "url": "images/DSCF7369.JPG", "date": "2026-02-03" },
+            { "url": "images/DSCF7344.JPG", "date": "2026-01-03" },
+            { "url": "images/DSCF7308.JPG", "date": "2025-12-20" },
+            { "url": "images/DSCF7231.JPG", "date": "2025-12-19" },
+            { "url": "images/DSCF7252.JPG", "date": "2025-12-19" },
+            { "url": "images/DSCF7280.JPG", "date": "2025-12-19" },
+            { "url": "images/DSCF7140.JPG", "date": "2025-12-18" },
+            { "url": "images/DSCF7156.JPG", "date": "2025-12-18" },
+            { "url": "images/DSCF7168.JPG", "date": "2025-12-18" },
+            { "url": "images/DSCF7173.JPG", "date": "2025-12-18" },
+            { "url": "images/DSCF7179.JPG", "date": "2025-12-18" },
+            { "url": "images/DSCF7180.JPG", "date": "2025-12-18" },
+            { "url": "images/DSCF7203.JPG", "date": "2025-12-18" },
+            { "url": "images/DSCF7066.JPG", "date": "2025-12-17" },
+            { "url": "images/DSCF7115.JPG", "date": "2025-12-17" },
+            { "url": "images/DSCF7043.JPG", "date": "2025-12-14" },
+            { "url": "images/DSCF7050.JPG", "date": "2025-12-14" },
+            { "url": "images/DSCF7054.JPG", "date": "2025-12-14" },
+            { "url": "images/DSCF6762.jpeg", "date": "2024-12-05" },
+            { "url": "images/DSCF7014.JPG", "date": "2025-12-03" },
+            { "url": "images/DSCF7015.JPG", "date": "2025-12-03" },
+            { "url": "images/DSCF6736.jpeg", "date": "2024-11-30" },
+            { "url": "images/DSCF6744.jpeg", "date": "2024-11-30" },
+            { "url": "images/IMG_7866.jpeg", "date": "2025-08-09" },
+            { "url": "images/IMG_7869.jpeg", "date": "2025-08-09" },
+            { "url": "images/IMG_7711.jpeg", "date": "2025-07-05" },
+            { "url": "images/DSCF6989.jpeg", "date": "2025-03-12" },
+            { "url": "images/DSCF6990.jpeg", "date": "2025-03-12" },
+            { "url": "images/DSCF6999.jpeg", "date": "2025-03-12" },
+            { "url": "images/IMG_7010.jpeg", "date": "2025-03-09" },
+            { "url": "images/IMG_7051.JPG", "date": "2025-03-09" },
+            { "url": "images/IMG_7063.JPG", "date": "2025-03-09" },
+            { "url": "images/IMG_7068.JPG", "date": "2025-03-09" },
+            { "url": "images/DSCF6885.JPG", "date": "2025-02-28" },
+            { "url": "images/DSCF6876.jpeg", "date": "2025-01-16" },
+            { "url": "images/DSCF6860.jpeg", "date": "2025-01-14" },
+            { "url": "images/DSCF6866.jpeg", "date": "2025-01-14" },
+            { "url": "images/DSCF6838.JPG", "date": "2025-01-13" },
+            { "url": "images/DSCF6829.JPG", "date": "2025-01-12" },
+            { "url": "images/DSCF6835.JPG", "date": "2025-01-12" },
+            { "url": "images/IMG_6492.jpeg", "date": "2025-01-12" },
+            { "url": "images/DSCF6796.jpeg", "date": "2024-12-24" },
+            { "url": "images/DSCF6775.jpeg", "date": "2024-12-16" },
+            { "url": "images/DSCF6671.JPG", "date": "2024-11-27" },
+            { "url": "images/DSCF6616.JPG", "date": "2024-11-07" },
+            { "url": "images/DSCF6621.JPG", "date": "2024-11-07" },
+            { "url": "images/DSCF6606.JPG", "date": "2024-10-20" },
+            { "url": "images/IMG_5655.JPG", "date": "2024-09-30" },
+            { "url": "images/DSCF6430.jpeg", "date": "2024-09-25" },
+            { "url": "images/DSCF6410.jpg", "date": "2024-09-07" },
+            { "url": "images/DSCF6364.jpg", "date": "2024-08-31" },
+            { "url": "images/DSCF6308.jpg", "date": "2024-08-30" },
+            { "url": "images/DSCF6310.jpg", "date": "2024-08-30" },
+            { "url": "images/DSCF6315.jpg", "date": "2024-08-30" },
+            { "url": "images/DSCF6304.jpg", "date": "2024-08-24" },
+            { "url": "images/DSCF6282.jpg", "date": "2024-08-17" },
+            { "url": "images/DSCF6292.jpg", "date": "2024-08-17" },
+            { "url": "images/DSCF6213.jpg", "date": "2024-08-10" },
+            { "url": "images/DSCF6258.jpg", "date": "2024-08-10" },
+            { "url": "images/DSCF6137.jpg", "date": "2024-07-20" },
+            { "url": "images/DSCF6164.jpg", "date": "2024-07-20" },
+            { "url": "images/DSCF6084.jpg", "date": "2024-07-13" },
+            { "url": "images/DSCF6106.jpg", "date": "2024-07-13" },
+            { "url": "images/DSCF5898.jpg", "date": "2024-06-25" },
+            { "url": "images/DSCF5863.jpg", "date": "2024-06-24" },
+            { "url": "images/DSCF5865.jpg", "date": "2024-06-24" },
+            { "url": "images/DSCF5868.jpg", "date": "2024-06-24" },
+            { "url": "images/DSCF5887.jpg", "date": "2024-06-24" },
+            { "url": "images/DSCF5890.jpg", "date": "2024-06-24" },
+            { "url": "images/DSCF5811.jpg", "date": "2024-06-23" },
+            { "url": "images/DSCF5832.jpg", "date": "2024-06-23" },
+            { "url": "images/DSCF5759.jpg", "date": "2024-06-22" },
+            { "url": "images/DSCF5762.jpg", "date": "2024-06-22" },
+            { "url": "images/DSCF5686.jpg", "date": "2024-06-21" },
+            { "url": "images/DSCF5720.jpg", "date": "2024-06-21" },
+            { "url": "images/DSCF5722.jpg", "date": "2024-06-21" },
+            { "url": "images/DSCF5731.jpg", "date": "2024-06-21" },
+            { "url": "images/DSCF5583.jpg", "date": "2024-06-20" },
+            { "url": "images/DSCF5534.jpg", "date": "2024-06-19" },
+            { "url": "images/DSCF5555.jpg", "date": "2024-06-19" },
+            { "url": "images/DSCF5487.jpg", "date": "2024-06-18" },
+            { "url": "images/DSCF5504.jpg", "date": "2024-06-18" },
+            { "url": "images/DSCF5508.jpg", "date": "2024-06-18" },
+            { "url": "images/DSCF5509.jpg", "date": "2024-06-18" },
+            { "url": "images/DSCF5346.jpg", "date": "2024-06-17" },
+            { "url": "images/DSCF5362.jpg", "date": "2024-06-17" },
+            { "url": "images/DSCF5391.jpg", "date": "2024-06-17" },
+            { "url": "images/DSCF5407.jpg", "date": "2024-06-17" },
+            { "url": "images/DSCF5434.jpg", "date": "2024-06-17" },
+            { "url": "images/DSCF5442.jpg", "date": "2024-06-17" },
+            { "url": "images/DSCF5454.jpg", "date": "2024-06-17" },
+            { "url": "images/DSCF5456.jpg", "date": "2024-06-17" },
+            { "url": "images/DSCF5311.jpg", "date": "2024-06-16" },
+            { "url": "images/DSCF5315.jpg", "date": "2024-06-16" },
+            { "url": "images/DSCF5318.jpg", "date": "2024-06-16" },
+            { "url": "images/DSCF5329.jpg", "date": "2024-06-16" },
+            { "url": "images/DSCF5242.jpg", "date": "2024-06-15" },
+            { "url": "images/DSCF5243.jpg", "date": "2024-06-15" },
+            { "url": "images/DSCF5244.jpg", "date": "2024-06-15" },
+            { "url": "images/DSCF5248.jpg", "date": "2024-06-15" },
+            { "url": "images/DSCF5251.jpg", "date": "2024-06-15" },
+            { "url": "images/DSCF5135.jpg", "date": "2024-05-24" },
+            { "url": "images/DSCF5162.jpg", "date": "2024-05-24" },
+            { "url": "images/DSCF5048.jpg", "date": "2024-03-12" },
+            { "url": "images/DSCF5050.jpg", "date": "2024-03-12" },
+            { "url": "images/DSCF5053.jpg", "date": "2024-03-12" },
+            { "url": "images/DSCF4958.jpg", "date": "2024-02-13" },
+            { "url": "images/DSCF4865.jpg", "date": "2024-02-04" },
+            { "url": "images/DSCF4873.jpg", "date": "2024-02-04" },
+            { "url": "images/DSCF4821.jpg", "date": "2024-01-26" },
+            { "url": "images/DSCF4851.jpg", "date": "2024-01-26" },
+            { "url": "images/DSCF4759.jpg", "date": "2024-01-12" },
+            { "url": "images/DSCF4746.jpg", "date": "2024-01-07" }
+        ];
+
+        library.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const imgs = [document.getElementById('img-1'), document.getElementById('img-2')];
+        let activeIdx = 0; 
+        let currentPhotoIdx = 0; 
+        let isTransitioning = false;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function exitGallery(e) {
+            if (e) e.preventDefault();
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 500);
+        }
+
+        function preloadImages(idx) {
+            const nextIdx = (idx + 1) % library.length;
+            const prevIdx = (idx - 1 + library.length) % library.length;
+            new Image().src = library[nextIdx].url;
+            new Image().src = library[prevIdx].url;
+        }
+
+        function updateGallery(newPhotoIdx, direction = 'next') {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            const nextImgIdx = 1 - activeIdx;
+            const currentImg = imgs[activeIdx];
+            const nextImg = imgs[nextImgIdx];
+            const photo = library[newPhotoIdx];
+
+            nextImg.className = `gallery-img no-transition ${direction === 'next' ? 'view-right' : 'view-left'}`;
+            nextImg.src = photo.url;
+
+            void nextImg.offsetWidth;
+            
+            nextImg.classList.remove('no-transition');
+            currentImg.className = `gallery-img ${direction === 'next' ? 'view-left' : 'view-right'}`;
+            nextImg.className = 'gallery-img view-active';
+            
+            setTimeout(() => {
+                activeIdx = nextImgIdx;
+                isTransitioning = false;
+                preloadImages(newPhotoIdx);
+            }, 600);
+        }
+
+        const goNext = () => {
+            if (isTransitioning) return;
+            currentPhotoIdx = (currentPhotoIdx + 1) % library.length;
+            updateGallery(currentPhotoIdx, 'next');
+        };
+
+        const goPrev = () => {
+            if (isTransitioning) return;
+            currentPhotoIdx = (currentPhotoIdx - 1 + library.length) % library.length;
+            updateGallery(currentPhotoIdx, 'prev');
+        };
+
+        const handleSwipe = () => {
+            const threshold = 50;
+            if (touchEndX < touchStartX - threshold) goNext();
+            if (touchEndX > touchStartX + threshold) goPrev();
+        };
+
+        document.getElementById('close-btn').addEventListener('click', exitGallery);
+        document.getElementById('center-exit').addEventListener('click', exitGallery);
+        document.getElementById('next-zone').addEventListener('click', goNext);
+        document.getElementById('prev-zone').addEventListener('click', goPrev);
+        document.getElementById('btn-next').addEventListener('click', goNext);
+        document.getElementById('btn-prev').addEventListener('click', goPrev);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') goNext();
+            if (e.key === 'ArrowLeft') goPrev();
+            if (e.key === 'Escape' || e.key === 'Esc') exitGallery();
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        const first = library[0];
+        imgs[0].src = first.url;
+        imgs[0].className = 'gallery-img view-active';
+        preloadImages(0);
+    </script>
+</body>
+</html>
