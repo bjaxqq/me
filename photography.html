@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brooks Jackson</title>
+    <title>Photography — Brooks Jackson</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="description" content="Photography by Brooks Jackson.">
+    <meta property="og:title" content="Photography — Brooks Jackson">
+    <meta property="og:description" content="Photography by Brooks Jackson.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Photography — Brooks Jackson">
+    <meta name="twitter:description" content="Photography by Brooks Jackson.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
@@ -12,6 +20,7 @@
             --bg: #faf9f8;
             --ink: #1a1a1a;
             --ink-muted: #8c8c8c;
+            --serif: "Newsreader", serif;
             --transition-speed: 0.5s;
             --transition: var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -32,7 +41,7 @@
             width: 100%;
             overflow: hidden;
             background-color: var(--bg);
-            font-family: "Newsreader", serif;
+            font-family: var(--serif);
             -webkit-font-smoothing: antialiased;
             opacity: 0;
             animation: fadeIn 0.5s ease forwards;
@@ -155,6 +164,20 @@
             cursor: default;
         }
 
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--serif);
+            font-size: 16px;
+            font-style: italic;
+            color: var(--ink-muted);
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+        }
+
         @media (max-width: 768px) {
             .gallery-img {
                 max-width: 85vw;
@@ -176,12 +199,14 @@
 </head>
 <body>
 
-    <a href="index.html" class="project-link" id="close-btn">X</a>
+    <a href="index.html" class="project-link" id="close-btn">&times;</a>
 
     <div class="nav-zone nav-left" id="prev-zone"></div>
     <div class="nav-zone nav-right" id="next-zone"></div>
     
     <a href="index.html" class="exit-trigger" id="center-exit"></a>
+
+    <div id="loading">Loading</div>
 
     <div class="canvas">
         <img id="img-1" class="gallery-img" src="" alt="">
@@ -209,26 +234,34 @@
         let touchStartX = 0;
         let touchEndX = 0;
 
+        const loadingEl = document.getElementById('loading');
+
         async function init() {
             try {
                 const response = await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG}.json`);
                 const data = await response.json();
-                
+
                 library = data.resources.map(res => ({
                     url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto,w_1600/v${res.version}/${res.public_id}.${res.format}`,
                     date: res.created_at
                 }));
 
                 library.sort((a, b) => new Date(b.date) - new Date(a.date));
-                
+
                 if (library.length > 0) {
                     const first = library[0];
                     imgs[0].src = first.url;
-                    imgs[0].classList.add('view-active');
-                    preloadAdjacent(0);
+                    imgs[0].alt = 'Photo by Brooks Jackson';
+                    imgs[1].alt = 'Photo by Brooks Jackson';
+                    imgs[0].onload = () => {
+                        loadingEl.style.opacity = '0';
+                        imgs[0].classList.add('view-active');
+                        preloadAdjacent(0);
+                    };
                 }
             } catch (err) {
                 console.error(err);
+                loadingEl.textContent = 'Could not load photos.';
             }
         }
 
