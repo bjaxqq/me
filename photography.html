@@ -12,7 +12,7 @@
             --bg: #faf9f8;
             --ink: #1a1a1a;
             --ink-muted: #8c8c8c;
-            --transition-speed: 0.4s;
+            --transition-speed: 0.5s;
             --transition: var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -64,7 +64,7 @@
         }
 
         .no-transition {
-            transition: none !important;
+            transition: none;
         }
 
         .view-active { 
@@ -201,6 +201,7 @@
         const CLOUD_NAME = "dokygyvyz";
         const TAG = "portfolio";
         let library = [];
+        const preloadCache = new Set();
         const imgs = [document.getElementById('img-1'), document.getElementById('img-2')];
         let activeIdx = 0; 
         let currentPhotoIdx = 0; 
@@ -234,9 +235,9 @@
         function exitGallery(e) {
             if (e) e.preventDefault();
             document.body.style.opacity = '0';
-            setTimeout(() => {
+            document.body.addEventListener('transitionend', () => {
                 window.location.href = 'index.html';
-            }, 500);
+            }, { once: true });
         }
 
         async function updateGallery(newPhotoIdx, direction = 'next') {
@@ -273,10 +274,15 @@
 
         function preloadAdjacent(idx) {
             if (library.length <= 1) return;
-            const next = library[(idx + 1) % library.length];
-            const prev = library[(idx - 1 + library.length) % library.length];
-            new Image().src = next.url;
-            new Image().src = prev.url;
+            [
+                library[(idx + 1) % library.length].url,
+                library[(idx - 1 + library.length) % library.length].url,
+            ].forEach(url => {
+                if (!preloadCache.has(url)) {
+                    preloadCache.add(url);
+                    new Image().src = url;
+                }
+            });
         }
 
         const goNext = () => {

@@ -243,9 +243,9 @@
         photoLink.addEventListener('click', (e) => {
             e.preventDefault();
             document.body.style.opacity = '0';
-            setTimeout(() => {
+            document.body.addEventListener('transitionend', () => {
                 window.location.href = 'photography.html';
-            }, 500);
+            }, { once: true });
         });
     </script>
 </body>
