@@ -209,14 +209,14 @@ export function countUp(el, value, { decimals = 0, prefix = '', suffix = '' } = 
 
 export function initChrome() {
     const bar = document.getElementById('sectionbar');
-    const masthead = document.getElementById('top');
+    const handoff = document.querySelector('.chrome-handoff');
 
-    if (bar && masthead) {
+    if (bar && handoff) {
         const sentinel = new IntersectionObserver(([entry]) => {
             bar.classList.toggle('is-in', !entry.isIntersecting);
-        }, { rootMargin: '-40% 0px 0px 0px' });
+        }, { rootMargin: '0px' });
 
-        sentinel.observe(masthead);
+        sentinel.observe(handoff);
     }
 
     const links = [...document.querySelectorAll('.sectionbar__nav a[href^="#"]')];
@@ -240,7 +240,7 @@ export function initChrome() {
     sections.forEach((s) => spy.observe(s));
 }
 
-export function fitLines(container, { max = 400, min = 28 } = {}) {
+export function fitLines(container, { max = 400, min = 28, sample = null } = {}) {
     if (!container) return;
 
     const lines = [...container.querySelectorAll('[data-fit]')];
@@ -257,25 +257,53 @@ export function fitLines(container, { max = 400, min = 28 } = {}) {
 
         lines.forEach((line) => {
             const target = line.firstElementChild || line;
+
+            const probe = line.cloneNode(true);
+            const probeTarget = probe.firstElementChild || probe;
+
+            if (sample !== null) probeTarget.textContent = sample;
+
+            Object.assign(probe.style, {
+                position: 'absolute',
+                left: '-99999px',
+                top: '0',
+                visibility: 'hidden',
+                overflow: 'visible',
+                whiteSpace: 'nowrap',
+                transform: 'none',
+                opacity: '1',
+                margin: '0',
+                padding: '0',
+            });
+
+            [...probe.querySelectorAll('*')].forEach((el) => {
+                el.style.transform = 'none';
+                el.style.transition = 'none';
+            });
+
+            container.appendChild(probe);
+
             const range = document.createRange();
             const advance = () => {
-                range.selectNodeContents(target);
+                range.selectNodeContents(probeTarget);
 
                 return range.getBoundingClientRect().width;
             };
 
             let size = 200;
-            let bleed = { left: 0, right: 0 };
+            let measured = false;
 
             for (let pass = 0; pass < PASSES; pass += 1) {
-                line.style.fontSize = `${size}px`;
-                line.style.textIndent = '0px';
+                probe.style.fontSize = `${size}px`;
+                probe.style.textIndent = '0px';
 
                 const natural = advance();
 
-                if (!natural) { line.style.fontSize = ''; return; }
+                if (!natural) break;
 
-                bleed = inkBleed(target);
+                measured = true;
+
+                const bleed = inkBleed(probeTarget);
                 const total = natural + bleed.left + bleed.right;
 
                 const next = Math.max(min, Math.min(max, size * ((width * TARGET) / total)));
@@ -285,12 +313,12 @@ export function fitLines(container, { max = 400, min = 28 } = {}) {
                 size = next;
             }
 
+            probe.remove();
+
+            if (!measured) return;
+
             line.style.fontSize = `${size.toFixed(2)}px`;
             line.style.textIndent = '0px';
-
-            bleed = inkBleed(target);
-
-            line.style.textIndent = `${bleed.left.toFixed(2)}px`;
             line.style.paddingBottom = '0px';
             line.style.paddingBottom = `${descenderOverflow(target)}px`;
         });
@@ -318,6 +346,8 @@ export function fitLines(container, { max = 400, min = 28 } = {}) {
     refit(true);
 
     if (document.fonts?.ready) document.fonts.ready.then(() => refit(true));
+
+    window.setTimeout(() => refit(true), 300);
 
     window.addEventListener('resize', () => schedule(), { passive: true });
     window.addEventListener('orientationchange', () => schedule(true));
@@ -415,21 +445,23 @@ function descenderOverflow(target) {
     
     const baselineY = marker.getBoundingClientRect().top;
     const boxBottom = target.getBoundingClientRect().bottom;
-    
+
     target.removeChild(marker);
 
-    return Math.max(0, Math.ceil(baselineY + below - boxBottom) + 2);
+    return Math.max(0, Math.ceil(baselineY + below - boxBottom)) + Math.ceil(size * 0.05);
 }
 
 export function stampDateline() {
-    const el = document.getElementById('dateline-date');
+    const dates = document.querySelectorAll('[data-current-date]');
     const edition = document.getElementById('edition');
     const now = new Date();
 
-    if (el) {
-        el.textContent = now.toLocaleDateString('en-GB', {
+    if (dates.length) {
+        const formatted = now.toLocaleDateString('en-GB', {
             weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
         });
+
+        dates.forEach((el) => { el.textContent = formatted; });
     }
 
     if (edition) {

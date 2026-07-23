@@ -1,5 +1,5 @@
 import { initScroll, initReveals, initChrome, countUp, stampDateline, fitLines } from './motion.js';
-import { parseDate, longDate, shortDate, monthYear, year as yearOf } from './dates.js';
+import { parseDate, shortDate, monthYear, year as yearOf } from './dates.js';
 import { initTheme } from './theme.js';
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
@@ -226,10 +226,15 @@ function renderNowPlaying(section, now) {
     const fit = () => {
         const viewport = track.parentElement;
         const first = track.firstElementChild;
-    
+
         if (!viewport || !first) return;
-    
-        track.classList.toggle('is-static', first.getBoundingClientRect().width <= viewport.clientWidth);
+
+        // Measure at natural width first — is-static stretches the first span
+        // to fill the viewport, which would always read as "fits" and trap it
+        // static. Only let it scroll when the content genuinely overflows.
+        track.classList.remove('is-static');
+        const overflows = first.getBoundingClientRect().width > viewport.clientWidth;
+        track.classList.toggle('is-static', !overflows);
     };
 
     requestAnimationFrame(fit);
@@ -483,48 +488,11 @@ function pollNowPlaying() {
     window.setInterval(tick, 45000);
 }
 
-async function loadJournal() {
-    const host = document.querySelector('[data-slot="journal"]');
-    
-    if (!host) return;
-
-    try {
-        const res = await fetch('/posts/index.json');
-    
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    
-        const entries = (await res.json())
-            .filter((e) => !e.draft)
-            .sort((a, b) => parseDate(b.date) - parseDate(a.date))
-            .slice(0, 3);
-
-        if (!entries.length) {
-            host.innerHTML = `<p class="brief__dek" style="padding:1.75rem 0">No entries yet.</p>`;
-            return;
-        }
-
-        host.innerHTML = entries.map((e, i) => `
-            <a class="brief" href="/journal/${esc(e.slug)}" data-reveal style="--delay:${i * 90}ms">
-                <span class="agate agate--faint">${esc(longDate(e.date))}</span>
-                <h3 class="brief__title">${esc(e.title)}</h3>
-                <p class="brief__dek">${esc(e.dek || '')}</p>
-                <span class="brief__more">Read &rarr;</span>
-            </a>
-        `).join('');
-
-        initReveals(host);
-    } catch (err) {
-        console.warn('[journal] index unavailable:', err.message);
-        host.innerHTML = `<p class="brief__dek" style="padding:1.75rem 0">Couldn&rsquo;t load the journal.</p>`;
-    }
-}
-
 initTheme();
 stampDateline();
-fitLines(document.querySelector('.masthead__name'));
+fitLines(document.querySelector('.wordmark'), { sample: 'Brooks Jackson.' });
 initScroll();
 initChrome();
 initReveals(document);
 loadStats();
-loadJournal();
 pollNowPlaying();

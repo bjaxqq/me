@@ -36,27 +36,57 @@
 
 <a class="skip" href="#archive">Skip to the archive</a>
 
+<div class="sectionbar" id="sectionbar">
+    <div class="sheet sectionbar__inner">
+        <a href="/" class="sectionbar__name">Brooks Jackson</a>
+
+        <nav class="sectionbar__nav" aria-label="Sections">
+            <a href="/#lead">About</a>
+            <a href="/#index">Stats</a>
+            <a href="#archive" aria-current="true">Journal</a>
+        </nav>
+
+        <div class="sectionbar__end">
+            <span class="agate agate--faint sectionbar__date" data-current-date>&mdash;</span>
+            <button class="theme-toggle" type="button" data-theme-toggle>Dark</button>
+        </div>
+    </div>
+</div>
+
 <header class="jhead sheet">
     <div class="rule rule--soft" data-reveal="rule"></div>
 
-    <div class="jhead__bar">
-        <a href="/" class="jhead__back link">&larr; Brooks Jackson</a>
-
+    <div class="dateline agate">
+        <a href="/" class="dateline__back link">&larr;&nbsp;Brooks&nbsp;Jackson</a>
+        <span class="dateline__mid" data-current-date>&mdash;</span>
         <button class="theme-toggle" type="button" data-theme-toggle>Dark</button>
     </div>
 
-    <div class="rule rule--hard" data-reveal="rule" style="--delay:100ms"></div>
+    <div class="rule rule--hard" data-reveal="rule" style="--delay:120ms"></div>
 
-    <h1 class="jhead__title">
-        <span class="rise" data-fit data-reveal="rise" style="--delay:200ms"><span><em>Journal</em><span class="jhead__dot">.</span></span></span>
+    <h1 class="wordmark">
+        <span class="rise" data-fit data-reveal="rise" style="--delay:220ms"><span>Journal<span class="wordmark__dot">.</span></span></span>
     </h1>
 
-    <div class="rule rule--double" data-reveal="rule" style="--delay:420ms"></div>
+    <div class="rule rule--double" data-reveal="rule" style="--delay:520ms"></div>
 
-    <div class="jhead__meta" data-reveal style="--delay:540ms">
-        <span class="agate"><span id="jcount">&mdash;</span> entries &middot; newest first</span>
-        <span class="agate agate--faint" id="jdate">&mdash;</span>
+    <div class="masthead__foot chrome-handoff">
+        <p class="masthead__strap" data-reveal style="--delay:640ms">
+            My thoughts and notes.
+        </p>
+
+        <div class="masthead__end" data-reveal style="--delay:720ms">
+            <span><span id="jcount">&mdash;</span> entries</span>
+
+            <nav class="jsort" aria-label="Sort entries">
+                <button type="button" data-sort="newest" aria-current="true">Newest</button>
+                <span aria-hidden="true">&middot;</span>
+                <button type="button" data-sort="oldest">Oldest</button>
+            </nav>
+        </div>
     </div>
+
+    <div class="rule" data-reveal="rule" style="--delay:800ms"></div>
 </header>
 
 <main class="sheet" id="archive">
@@ -69,11 +99,17 @@
     <div class="rule rule--hard"></div>
 
     <div class="colophon">
-        <div class="agate agate--faint">Brooks Jackson</div>
+        <div>
+            <div class="agate" style="margin-bottom:0.4rem">Brooks Jackson &middot; bjaxqq</div>
+
+            <div class="agate agate--faint">
+                Set in Instrument Serif, Newsreader &amp; IBM&nbsp;Plex&nbsp;Mono.
+                Journal updated <span id="generated">&mdash;</span>.
+            </div>
+        </div>
 
         <nav class="colophon__links" aria-label="Links">
-            <a href="/" class="link">Home</a>
-            <a href="https://github.com/bjaxqq" class="link" target="_blank" rel="me noopener">GitHub</a>
+            <a href="https://github.com/bjaxqq" class="link" target="_blank" rel="me noopener">Work</a>
             <a href="mailto:contact@brooksjackson.me" class="link">Contact</a>
         </nav>
     </div>

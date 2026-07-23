@@ -1,4 +1,4 @@
-import { initScroll, initReveals, fitLines } from './motion.js';
+import { initScroll, initReveals, initChrome, stampDateline, fitLines } from './motion.js';
 import { parseDate, shortDate, year as yearOf } from './dates.js';
 import { initTheme } from './theme.js';
 
@@ -12,7 +12,7 @@ function entryRow(entry, i) {
     return `
         <a class="entry-row" href="/journal/${esc(entry.slug)}" data-reveal style="--delay:${Math.min(i, 6) * 60}ms">
             <span class="entry-row__date">${esc(shortDate(entry.date))}</span>
-            <span>
+            <span class="entry-row__main">
                 <span class="entry-row__title">${esc(entry.title)}</span>
                 ${entry.dek ? `<span class="entry-row__dek">${esc(entry.dek)}</span>` : ''}
                 ${entry.tags?.length ? `<span class="entry-row__tags">${entry.tags.map((t) => `<span>${esc(t)}</span>`).join('')}</span>` : ''}
@@ -22,55 +22,87 @@ function entryRow(entry, i) {
     `;
 }
 
-function render(entries) {
+function sortEntries(entries, mode) {
+    const sorted = [...entries];
+
+    if (mode === 'oldest') sorted.sort((a, b) => parseDate(a.date) - parseDate(b.date));
+    else sorted.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+
+    return sorted;
+}
+
+function render(entries, mode) {
     const byYear = new Map();
-    
+
     entries.forEach((e) => {
         const y = yearOf(e.date);
-    
+
         if (!byYear.has(y)) byYear.set(y, []);
-    
+
         byYear.get(y).push(e);
     });
 
-    host.innerHTML = [...byYear.entries()]
-        .sort((a, b) => b[0] - a[0])
-        .map(([year, list]) => `
-            <section class="year">
-                <h2 class="year__label" data-reveal>${year}</h2>
-                <div class="entries">${list.map(entryRow).join('')}</div>
-            </section>
-        `).join('');
+    const years = [...byYear.entries()].sort((a, b) => mode === 'oldest' ? a[0] - b[0] : b[0] - a[0]);
 
-    const count = document.getElementById('jcount');
-    
-    if (count) count.textContent = String(entries.length);
+    host.innerHTML = years.map(([year, list]) => `
+        <section class="year">
+            <h2 class="year__label" data-reveal>${year}</h2>
+            <div class="entries">${list.map(entryRow).join('')}</div>
+        </section>
+    `).join('');
 
     initReveals(host);
 }
 
-async function load() {
-    const stamp = document.getElementById('jdate');
-    
-    if (stamp) {
-        stamp.textContent = new Date().toLocaleDateString('en-GB', {
-            day: 'numeric', month: 'long', year: 'numeric',
-        });
-    }
+let allEntries = [];
+let sortMode = 'newest';
 
+function renderSorted() {
+    const count = document.getElementById('jcount');
+
+    if (count) count.textContent = String(allEntries.length);
+
+    render(sortEntries(allEntries, sortMode), sortMode);
+}
+
+function initSort() {
+    document.querySelectorAll('.jsort button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (btn.dataset.sort === sortMode || !allEntries.length) return;
+
+            sortMode = btn.dataset.sort;
+
+            document.querySelectorAll('.jsort button').forEach((b) => {
+                b.setAttribute('aria-current', String(b === btn));
+            });
+
+            renderSorted();
+        });
+    });
+}
+
+async function load() {
     try {
         const res = await fetch('/posts/index.json');
     
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        const entries = (await res.json())
-            .filter((e) => !e.draft)
-            .sort((a, b) => parseDate(b.date) - parseDate(a.date));
+        allEntries = (await res.json()).filter((e) => !e.draft);
 
-        if (!entries.length) {
+        const generated = document.getElementById('generated');
+
+        if (generated && allEntries.length) {
+            const newest = allEntries.reduce((a, b) => (parseDate(b.date) > parseDate(a.date) ? b : a));
+            generated.textContent = parseDate(newest.date).toLocaleDateString('en-GB', {
+                day: 'numeric', month: 'short', year: 'numeric',
+            });
+        }
+
+        if (!allEntries.length) {
             const count = document.getElementById('jcount');
             if (count) count.textContent = '0';
             host.innerHTML = `
+                <div class="rule rule--hard"></div>
                 <div class="empty">
                     <p class="empty__title">No entries yet.</p>
                     <p class="empty__note">
@@ -81,7 +113,7 @@ async function load() {
             return;
         }
 
-        render(entries);
+        renderSorted();
     } catch (err) {
         console.warn('[journal]', err.message);
     
@@ -90,7 +122,12 @@ async function load() {
 }
 
 initTheme();
-fitLines(document.querySelector('.jhead__title'), { max: 560 });
+initSort();
+stampDateline();
+// Sized as if it read "Brooks Jackson." — same font-size as the home page
+// heading, rather than "Journal." independently filling its own width.
+fitLines(document.querySelector('.wordmark'), { sample: 'Brooks Jackson.' });
 initScroll();
 initReveals(document);
+initChrome();
 load();

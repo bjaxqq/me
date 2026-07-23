@@ -44,9 +44,13 @@
         <nav class="sectionbar__nav" aria-label="Sections">
             <a href="#lead">About</a>
             <a href="#index">Stats</a>
-            <a href="#journal">Journal</a>
-            <a href="/journal" data-optional>Archive</a>
+            <a href="/journal">Journal</a>
         </nav>
+
+        <div class="sectionbar__end">
+            <span class="agate agate--faint sectionbar__date" data-current-date>&mdash;</span>
+            <button class="theme-toggle" type="button" data-theme-toggle>Dark</button>
+        </div>
     </div>
 </div>
 
@@ -55,24 +59,24 @@
 
     <div class="dateline agate">
         <span>No.&nbsp;<span class="tnum" id="edition">001</span></span>
-        <span class="dateline__mid" id="dateline-date">&mdash;</span>
+        <span class="dateline__mid" data-current-date>&mdash;</span>
         <button class="theme-toggle" type="button" data-theme-toggle>Dark</button>
     </div>
 
     <div class="rule rule--hard" data-reveal="rule" style="--delay:120ms"></div>
 
-    <h1 class="masthead__name">
-        <span class="rise" data-fit data-reveal="rise" style="--delay:220ms"><span>Brooks&nbsp;Jackson<span class="masthead__dot">.</span></span></span>
+    <h1 class="wordmark">
+        <span class="rise" data-fit data-reveal="rise" style="--delay:220ms"><span>Brooks&nbsp;Jackson<span class="wordmark__dot">.</span></span></span>
     </h1>
 
     <div class="rule rule--double" data-reveal="rule" style="--delay:520ms"></div>
 
-    <div class="masthead__foot">
+    <div class="masthead__foot chrome-handoff">
         <p class="masthead__strap" data-reveal style="--delay:640ms">
-            An insight into my hobbies, interests, and what I'm currently reading, watching, listening to, and playing.
+            My hobbies, interests, and media consuption.
         </p>
         
-        <nav class="masthead__index" aria-label="Page sections" data-reveal style="--delay:720ms">
+        <nav class="masthead__end" aria-label="Page sections" data-reveal style="--delay:720ms">
             <a href="#lead" class="link">About</a>
             <a href="#index" class="link">Stats</a>
             <a href="/journal" class="link">Journal</a>
@@ -80,11 +84,6 @@
     </div>
 
     <div class="rule" data-reveal="rule" style="--delay:800ms"></div>
-
-    <div class="cue" data-reveal style="--delay:900ms">
-        <span class="cue__line"></span>
-        <span class="agate agate--faint">Scroll</span>
-    </div>
 </header>
 
 <main>
@@ -145,7 +144,7 @@
     </div>
 </section>
 
-<section class="band sheet" id="index" style="padding-top:0">
+<section class="band sheet" id="index">
     <div class="tag" data-reveal>
         <span class="tag__no">02</span>
         <span class="tag__name">Stats</span>
@@ -317,7 +316,7 @@
             </span>
         
             <span class="ticker__viewport">
-                <span class="ticker__track" data-slot="np-track">
+                <span class="ticker__track is-static" data-slot="np-track">
                     <span>Nothing playing right now</span>
                     <span>Nothing playing right now</span>
                 </span>
@@ -359,19 +358,6 @@
     <div class="panel__body" data-reveal style="--delay:120ms">
         <div class="panel__colhead">Top plays</div>
         <div data-slot="top" data-empty="Nothing here yet."></div>
-    </div>
-</section>
-
-<section class="band sheet" id="journal">
-    <div class="tag" data-reveal>
-        <span class="tag__no">09</span>
-        <span class="tag__name">Journal</span>
-        <span class="tag__fill"></span>
-        <a href="/journal" class="agate agate--accent link">All entries &rarr;</a>
-    </div>
-
-    <div class="briefs" data-slot="journal">
-        <p class="brief__dek" style="padding:1.75rem 0">Loading&hellip;</p>
     </div>
 </section>
 
