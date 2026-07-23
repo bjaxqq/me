@@ -7,3 +7,5 @@ __pycache__/
 *.jpeg
 *.PNG
 *.png
+.vercel/
+node_modules/

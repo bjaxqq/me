@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal — Brooks Jackson</title>
+    <meta name="description" content="An entry from the journal of Brooks Jackson.">
+    <meta name="theme-color" content="#f4f1ea">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap">
+    <link rel="stylesheet" href="/css/broadsheet.css">
+    <link rel="stylesheet" href="/css/journal.css">
+    <script>
+        document.documentElement.classList.add('js');
+        try {
+            var t = localStorage.getItem('edition');
+            if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+    </script>
+</head>
+<body>
+
+<a class="skip" href="#body">Skip to the entry</a>
+
+<header class="jhead sheet">
+    <div class="rule rule--soft"></div>
+    <div class="jhead__bar">
+        <a href="/journal" class="jhead__back link">&larr; Journal</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>Dark</button>
+    </div>
+    <div class="rule rule--hard"></div>
+</header>
+
+<main class="sheet article">
+    <article id="entry">
+        <div class="article__head">
+            <h1 class="article__title" data-slot="title">&mdash;</h1>
+            <p class="article__dek" data-slot="dek"></p>
+        </div>
+
+        <div class="rule rule--hard"></div>
+
+        <div class="article__meta">
+            <span class="agate" data-slot="date">&mdash;</span>
+            <span class="agate agate--faint" data-slot="reading">&mdash;</span>
+        </div>
+
+        <div class="rule"></div>
+
+        <div class="article__body" id="body" data-slot="body">
+            <p class="agate agate--faint" style="padding-block:2rem">Loading&hellip;</p>
+        </div>
+    </article>
+
+    <nav class="updown" data-slot="updown" aria-label="Nearby entries"></nav>
+</main>
+
+<footer class="sheet">
+    <div class="rule rule--hard"></div>
+    <div class="colophon">
+        <div class="agate agate--faint">Brooks Jackson</div>
+        <nav class="colophon__links" aria-label="Links">
+            <a href="/" class="link">Home</a>
+            <a href="/journal" class="link">Journal</a>
+            <a href="mailto:contact@brooksjackson.me" class="link">Contact</a>
+        </nav>
+    </div>
+</footer>
+
+<script src="/js/vendor/lenis.min.js"></script>
+<script type="module" src="/js/entry.js"></script>
+</body>
+</html>

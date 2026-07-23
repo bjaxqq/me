@@ -1,0 +1,10 @@
+{
+  "name": "brooks-jackson-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Personal site — bio, a journal, and live stats from Goodreads, Letterboxd, Spotify and osu!.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  }
+}

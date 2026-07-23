@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Brooks Jackson</title>
+    <meta name="description" content="Page not found.">
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#f4f1ea">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap">
+    <link rel="stylesheet" href="/css/broadsheet.css">
+    <script>
+        document.documentElement.classList.add('js');
+        try {
+            var t = localStorage.getItem('edition');
+            if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+    </script>
+    <style>
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+        .four {
+            font-family: var(--display);
+            font-size: clamp(6rem, 30vw, 24rem);
+            line-height: 0.78;
+            letter-spacing: -0.05em;
+            font-variant-numeric: lining-nums;
+        }
+
+        .four span { color: var(--accent); }
+
+        .four-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 0.45fr);
+            gap: clamp(1.5rem, 4vw, 4rem);
+            align-items: end;
+            padding-block: clamp(1.5rem, 4vh, 3rem);
+        }
+
+        .four-note { padding-bottom: 1rem; max-width: 34ch; }
+
+        @media (max-width: 860px) {
+            .four-grid { grid-template-columns: 1fr; align-items: start; }
+        }
+    </style>
+</head>
+<body>
+
+<main class="sheet">
+    <div class="rule rule--soft"></div>
+    <div class="dateline agate" style="display:flex;justify-content:space-between;align-items:center;padding-block:0.85rem">
+        <span>Error 404</span>
+        <button class="theme-toggle" type="button" data-theme-toggle>Dark</button>
+    </div>
+    <div class="rule rule--hard"></div>
+
+    <div class="four-grid">
+        <h1 class="four">4<span>0</span>4</h1>
+        <p class="four-note lead">
+            This page doesn&rsquo;t exist. Try the
+            <a href="/" class="link link--ruled">home page</a> or the
+            <a href="/journal" class="link link--ruled">journal</a>.
+        </p>
+    </div>
+
+    <div class="rule rule--double"></div>
+
+    <nav class="colophon" aria-label="Links">
+        <span class="agate agate--faint">Brooks Jackson</span>
+        <span class="colophon__links">
+            <a href="/" class="link">Home</a>
+            <a href="/journal" class="link">Journal</a>
+            <a href="mailto:contact@brooksjackson.me" class="link">Contact</a>
+        </span>
+    </nav>
+</main>
+
+<script type="module">
+    import { initTheme } from '/js/theme.js';
+    initTheme();
+</script>
+</body>
+</html>

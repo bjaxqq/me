@@ -4,261 +4,348 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brooks Jackson</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <meta name="description" content="Brooks Jackson — I build things and take pictures.">
+    <meta name="description" content="Brooks Jackson — software and photographs, plus what I've been reading, watching and playing.">
+    <meta name="theme-color" content="#f4f1ea">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
     <meta property="og:title" content="Brooks Jackson">
-    <meta property="og:description" content="I build things and take pictures.">
+    <meta property="og:description" content="Software and photographs, plus what I've been reading, watching and playing.">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Brooks Jackson">
-    <meta name="twitter:description" content="I build things and take pictures.">
+    <meta name="twitter:description" content="Software and photographs, plus what I've been reading, watching and playing.">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #faf9f8;
-            --ink: #1a1a1a;
-            --ink-muted: #8c8c8c;
-            --serif: "Newsreader", serif;
-            --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        html, body {
-            height: 100%;
-            overflow: hidden;
-            background-color: var(--bg);
-            color: var(--ink);
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 8vh 80px;
-            font-family: var(--serif);
-            opacity: 0;
-            animation: fadeIn 0.5s ease forwards;
-            transition: opacity 0.5s ease;
-        }
-
-        header {
-            max-width: 500px;
-            z-index: 10;
-        }
-
-        h1 {
-            font-size: 54px;
-            font-weight: 300;
-            font-style: italic;
-            letter-spacing: -0.04em;
-            line-height: 1.05;
-            margin-bottom: 24px;
-            cursor: pointer;
-        }
-
-        .bio {
-            font-size: 20px;
-            font-weight: 300;
-            line-height: 1.6;
-            color: var(--ink-muted);
-        }
-
-        main {
-            display: grid;
-            grid-template-columns: 1fr;
-            grid-template-rows: 1fr;
-            width: 100%;
-            flex: 1;
-            align-items: center;
-        }
-
-        .view-layer {
-            grid-column: 1;
-            grid-row: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 16px;
-            transition: opacity var(--transition), transform var(--transition);
-        }
-
-        .view-active {
-            opacity: 1;
-            transform: translateX(0);
-            pointer-events: all;
-        }
-
-        .view-left {
-            opacity: 0;
-            transform: translateX(-40px);
-            pointer-events: none;
-        }
-
-        .view-hidden {
-            opacity: 0;
-            transform: translateX(40px);
-            pointer-events: none;
-        }
-
-        .project-link, .presence a {
-            text-decoration: none;
-            color: var(--ink);
-            position: relative;
-            transition: color 0.4s ease;
-        }
-
-        .project-link {
-            font-size: 32px;
-            font-weight: 300;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-family: inherit;
-        }
-
-        .presence a {
-            font-size: 18px;
-            font-weight: 300;
-        }
-
-        .project-link::after, .presence a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: -2px;
-            left: 0;
-            background-color: var(--ink-muted);
-            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .project-link:hover, .presence a:hover {
-            color: var(--ink-muted);
-        }
-
-        .project-link:hover::after, .presence a:hover::after {
-            width: 100%;
-        }
-
-        footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            width: 100%;
-            z-index: 10;
-        }
-
-        .meta-text {
-            font-size: 16px;
-            font-style: italic;
-            color: var(--ink-muted);
-        }
-
-        .presence {
-            display: flex;
-            gap: 40px;
-        }
-
-        @media (max-width: 768px) {
-            body { padding: 40px 32px; }
-            h1 { font-size: 42px; }
-            .presence { flex-direction: column; gap: 12px; text-align: right; }
-            .presence a::after { left: auto; right: 0; }
-            footer { align-items: flex-end; }
-            .meta-text { font-size: 14px; }
-        }
-    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap">
+    <link rel="stylesheet" href="/css/broadsheet.css">
+    <link rel="stylesheet" href="/css/front.css">
+    <script>
+        document.documentElement.classList.add('js');
+        try {
+            var t = localStorage.getItem('edition');
+            if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+    </script>
 </head>
 <body>
-    <header>
-        <h1 id="name-header">Brooks Jackson</h1>
-        <p class="bio">I build things and take pictures.</p>
-    </header>
 
-    <main>
-        <div id="categories-list" class="view-layer view-active">
-            <button class="project-link" id="projects-trigger">Projects</button>
-            <a href="photography.html" class="project-link" id="photo-link">Photography</a>
-        </div>
+<a class="skip" href="#lead">Skip to content</a>
 
-        <div id="projects-list" class="view-layer view-hidden">
-            <button class="project-link" id="back-trigger">Back</button>
-            <a href="https://github.com/bjaxqq/stereotweet" class="project-link" target="_blank" rel="noopener noreferrer">Stereotweet</a>
-            <a href="https://github.com/bjaxqq/SER225" class="project-link" target="_blank" rel="noopener noreferrer">Weaver's Wrath</a>
-            <a href="https://github.com/bjaxqq/resonance" class="project-link" target="_blank" rel="noopener noreferrer">Resonance</a>
-        </div>
-    </main>
-
-    <footer>
-        <div class="meta-text">bjaxqq &middot; 2026</div>
-        <nav class="presence">
-            <a href="https://www.linkedin.com/in/brooks-jackson/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="https://github.com/bjaxqq" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="documents/my_resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
-            <a href="mailto:brooksjackson@proton.me">Email</a>
+<div class="sectionbar" id="sectionbar">
+    <div class="sheet sectionbar__inner">
+        <a href="#top" class="sectionbar__name">Brooks Jackson</a>
+        <nav class="sectionbar__nav" aria-label="Sections">
+            <a href="#lead">About</a>
+            <a href="#index">Stats</a>
+            <a href="#journal">Journal</a>
+            <a href="/journal" data-optional>Archive</a>
         </nav>
-    </footer>
+    </div>
+</div>
 
-    <script>
-        const categoriesList = document.getElementById('categories-list');
-        const projectsList = document.getElementById('projects-list');
-        const projectsTrigger = document.getElementById('projects-trigger');
-        const backTrigger = document.getElementById('back-trigger');
-        const nameHeader = document.getElementById('name-header');
-        const photoLink = document.getElementById('photo-link');
+<header class="masthead sheet" id="top">
+    <div class="rule rule--soft" data-reveal="rule"></div>
 
-        function showProjects() {
-            categoriesList.classList.remove('view-active');
-            categoriesList.classList.add('view-left');
-            projectsList.classList.remove('view-hidden');
-            projectsList.classList.add('view-active');
-        }
+    <div class="dateline agate">
+        <span>No.&nbsp;<span class="tnum" id="edition">001</span></span>
+        <span class="dateline__mid" id="dateline-date">&mdash;</span>
+        <button class="theme-toggle" type="button" data-theme-toggle>Dark</button>
+    </div>
 
-        function showCategories() {
-            projectsList.classList.remove('view-active');
-            projectsList.classList.add('view-hidden');
-            categoriesList.classList.remove('view-left');
-            categoriesList.classList.add('view-active');
-        }
+    <div class="rule rule--hard" data-reveal="rule" style="--delay:120ms"></div>
 
-        projectsTrigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            showProjects();
-        });
+    <h1 class="masthead__name">
+        <span class="rise" data-fit data-reveal="rise" style="--delay:220ms"><span>Brooks&nbsp;Jackson<span class="masthead__dot">.</span></span></span>
+    </h1>
 
-        backTrigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            showCategories();
-        });
+    <div class="rule rule--double" data-reveal="rule" style="--delay:520ms"></div>
 
-        nameHeader.addEventListener('click', () => {
-            showCategories();
-        });
+    <div class="masthead__foot">
+        <p class="masthead__strap" data-reveal style="--delay:640ms">
+            Software, photographs, and what I&rsquo;ve been reading, watching and playing.
+        </p>
+        <nav class="masthead__index" aria-label="Page sections" data-reveal style="--delay:720ms">
+            <a href="#lead" class="link">About</a>
+            <a href="#index" class="link">Stats</a>
+            <a href="/journal" class="link">Journal</a>
+        </nav>
+    </div>
 
-        window.addEventListener('pageshow', () => {
-            document.body.style.opacity = '1';
-        });
+    <div class="rule" data-reveal="rule" style="--delay:800ms"></div>
 
-        photoLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.body.style.opacity = '0';
-            document.body.addEventListener('transitionend', () => {
-                window.location.href = 'photography.html';
-            }, { once: true });
-        });
-    </script>
+    <div class="cue" data-reveal style="--delay:900ms">
+        <span class="cue__line"></span>
+        <span class="agate agate--faint">Scroll</span>
+    </div>
+</header>
+
+<main>
+
+<section class="band sheet" id="lead">
+    <div class="tag" data-reveal>
+        <span class="tag__no">01</span>
+        <span class="tag__name">About</span>
+        <span class="tag__fill"></span>
+    </div>
+
+    <div class="lead-grid">
+        <div class="lead-grid__body">
+            <p class="lead dropcap" data-reveal>
+                I&rsquo;m Brooks, a software developer.
+            </p>
+            <p data-reveal style="--delay:100ms">
+                
+            </p>
+            <p data-reveal style="--delay:160ms">
+                
+            </p>
+        </div>
+
+        <aside class="glance" data-reveal style="--delay:220ms" aria-label="Details">
+            <div class="agate agate--faint glance__head">Details</div>
+            <div class="glance__row">
+                <span class="glance__k">Role</span>
+                <span class="glance__v">Software Developer</span>
+            </div>
+            <div class="glance__row">
+                <span class="glance__k">Journal</span>
+                <span class="glance__v"><a href="/journal" class="link link--ruled">Read it here</a></span>
+            </div>
+            <div class="glance__row">
+                <span class="glance__k">Work</span>
+                <span class="glance__v"><a href="https://github.com/bjaxqq" class="link link--ruled" rel="me noopener" target="_blank">github.com/bjaxqq</a></span>
+            </div>
+            <div class="glance__row">
+                <span class="glance__k">Contact</span>
+                <span class="glance__v"><a href="mailto:contact@brooksjackson.me" class="link link--ruled">contact@brooksjackson.me</a></span>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<section class="band sheet" id="index" style="padding-top:0">
+    <div class="tag" data-reveal>
+        <span class="tag__no">02</span>
+        <span class="tag__name">Stats</span>
+        <span class="tag__fill"></span>
+        <span class="wire" id="wire-status" data-state="loading">Loading</span>
+    </div>
+
+    <div class="ledger">
+        <div class="ledger__cell" data-reveal>
+            <div class="ledger__label">
+                <span class="agate">Books</span>
+                <span class="agate agate--faint">&rsquo;26</span>
+            </div>
+            <span class="numeral ledger__num" data-count data-bind="books.totals.year">&mdash;</span>
+            <p class="ledger__sub">Finished this year<br><b data-bind="books.totals.reading">&mdash;</b> on the go right now</p>
+        </div>
+        <div class="ledger__cell" data-reveal style="--delay:70ms">
+            <div class="ledger__label">
+                <span class="agate">Manga</span>
+                <span class="agate agate--faint">All time</span>
+            </div>
+            <span class="numeral ledger__num" data-count data-bind="manga.totals.completed">&mdash;</span>
+            <p class="ledger__sub">Series completed<br><b data-bind="manga.totals.units">&mdash;</b> chapters read</p>
+        </div>
+        <div class="ledger__cell" data-reveal style="--delay:140ms">
+            <div class="ledger__label">
+                <span class="agate">Film</span>
+                <span class="agate agate--faint">All time</span>
+            </div>
+            <span class="numeral ledger__num" data-count data-bind="films.totals.total">&mdash;</span>
+            <p class="ledger__sub"><b data-bind="films.totals.year">&mdash;</b> logged this year<br>Latest: <b data-bind="films.totals.latest">&mdash;</b></p>
+        </div>
+        <div class="ledger__cell" data-reveal style="--delay:210ms">
+            <div class="ledger__label">
+                <span class="agate">Anime</span>
+                <span class="agate agate--faint">All time</span>
+            </div>
+            <span class="numeral ledger__num" data-count data-bind="anime.totals.completed">&mdash;</span>
+            <p class="ledger__sub">Series completed<br><b data-bind="anime.totals.units">&mdash;</b> episodes watched</p>
+        </div>
+        <div class="ledger__cell" data-reveal style="--delay:280ms">
+            <div class="ledger__label">
+                <span class="agate">Music</span>
+                <span class="agate agate--faint">7 days</span>
+            </div>
+            <span class="numeral ledger__num" data-count data-bind="sound.totals.minutes">&mdash;</span>
+            <p class="ledger__sub"><span data-slot="music-note">Minutes listened</span><br>Most played: <b data-bind="sound.totals.top">&mdash;</b></p>
+        </div>
+        <div class="ledger__cell" data-reveal style="--delay:350ms">
+            <div class="ledger__label">
+                <span class="agate">osu!</span>
+                <span class="agate agate--faint">std</span>
+            </div>
+            <span class="numeral ledger__num" data-count data-prefix="#" data-bind="osu.stats.globalRank">&mdash;</span>
+            <p class="ledger__sub">Rank worldwide<br><b data-bind="osu.stats.pp">&mdash;</b> performance points</p>
+        </div>
+    </div>
+</section>
+
+<section class="panel sheet" id="books" data-source="books" data-state="loading">
+    <div class="panel__head">
+        <h2 class="panel__title" data-reveal><small>03 &mdash; Goodreads</small>Books</h2>
+        <span class="wire" data-wire>Loading</span>
+    </div>
+
+    <div class="panel__grid">
+        <div data-reveal>
+            <div class="panel__colhead">Currently reading</div>
+            <div data-slot="reading" data-empty="Nothing here yet."></div>
+        </div>
+
+        <div data-reveal style="--delay:120ms">
+            <div class="panel__colhead">Recently finished</div>
+            <div data-slot="read" data-empty="Nothing here yet."></div>
+        </div>
+    </div>
+</section>
+
+<section class="panel sheet" id="manga" data-source="manga" data-state="loading">
+    <div class="panel__head">
+        <h2 class="panel__title" data-reveal><small>04 &mdash; MyAnimeList</small>Manga</h2>
+        <span class="wire" data-wire>Loading</span>
+    </div>
+
+    <div class="panel__grid panel__grid--even">
+        <div data-reveal>
+            <div class="panel__colhead">Currently reading</div>
+            <div data-slot="current" data-empty="Nothing here yet."></div>
+        </div>
+        <div data-reveal style="--delay:120ms">
+            <div class="panel__colhead">Last five completed</div>
+            <div data-slot="completed" data-empty="Nothing here yet."></div>
+        </div>
+    </div>
+</section>
+
+<section class="panel sheet" id="film" data-source="films" data-state="loading">
+    <div class="panel__head">
+        <h2 class="panel__title" data-reveal><small>05 &mdash; Letterboxd</small>Film</h2>
+        <span class="wire" data-wire>Loading</span>
+    </div>
+
+    <div class="panel__grid panel__grid--even">
+        <div data-reveal>
+            <div class="panel__colhead">Last watched</div>
+            <div data-slot="latest" data-empty="Nothing here yet."></div>
+        </div>
+        <div data-reveal style="--delay:120ms">
+            <div class="panel__colhead">Recently watched</div>
+            <div data-slot="recent" data-empty="Nothing here yet."></div>
+        </div>
+    </div>
+</section>
+
+<section class="panel sheet" id="anime" data-source="anime" data-state="loading">
+    <div class="panel__head">
+        <h2 class="panel__title" data-reveal><small>06 &mdash; MyAnimeList</small>Anime</h2>
+        <span class="wire" data-wire>Loading</span>
+    </div>
+
+    <div class="panel__grid panel__grid--even">
+        <div data-reveal>
+            <div class="panel__colhead">Currently watching</div>
+            <div data-slot="current" data-empty="Nothing here yet."></div>
+        </div>
+        <div data-reveal style="--delay:120ms">
+            <div class="panel__colhead">Last five completed</div>
+            <div data-slot="completed" data-empty="Nothing here yet."></div>
+        </div>
+    </div>
+</section>
+
+<section class="panel sheet" id="sound" data-source="sound" data-state="loading">
+    <div class="panel__head">
+        <h2 class="panel__title" data-reveal><small>07 &mdash; Spotify</small>Music</h2>
+        <span class="wire" data-wire>Loading</span>
+    </div>
+
+    <div class="panel__body" data-reveal>
+        <div class="ticker">
+            <span class="ticker__label">
+                <span class="ticker__dot" data-slot="np-dot"></span>
+                <span class="agate agate--faint" data-slot="np-label">Not playing</span>
+            </span>
+            <span class="ticker__viewport">
+                <span class="ticker__track" data-slot="np-track">
+                    <span>Nothing playing right now</span>
+                    <span>Nothing playing right now</span>
+                </span>
+            </span>
+        </div>
+    </div>
+
+    <div class="panel__grid panel__grid--even">
+        <div data-reveal>
+            <div class="panel__colhead">Top artists &mdash; last 4 weeks</div>
+            <div data-slot="artists" data-empty="Nothing here yet."></div>
+        </div>
+        <div data-reveal style="--delay:120ms">
+            <div class="panel__colhead">Top tracks &mdash; last 4 weeks</div>
+            <div data-slot="tracks" data-empty="Nothing here yet."></div>
+        </div>
+    </div>
+</section>
+
+<section class="panel sheet" id="osu" data-source="osu" data-state="loading">
+    <div class="panel__head">
+        <h2 class="panel__title" data-reveal><small>08 &mdash; osu!standard</small>osu!</h2>
+        <span class="wire" data-wire>Loading</span>
+    </div>
+
+    <div class="panel__body" data-reveal>
+        <div class="strip" data-slot="strip">
+            <div class="strip__cell"><span class="agate">Global</span><span class="strip__v">&mdash;</span></div>
+            <div class="strip__cell"><span class="agate">Country</span><span class="strip__v">&mdash;</span></div>
+            <div class="strip__cell"><span class="agate">Accuracy</span><span class="strip__v">&mdash;</span></div>
+            <div class="strip__cell"><span class="agate">Play count</span><span class="strip__v">&mdash;</span></div>
+            <div class="strip__cell"><span class="agate">Level</span><span class="strip__v">&mdash;</span></div>
+            <div class="strip__cell"><span class="agate">Hours</span><span class="strip__v">&mdash;</span></div>
+        </div>
+    </div>
+
+    <div class="panel__body" data-reveal style="--delay:120ms">
+        <div class="panel__colhead">Top plays</div>
+        <div data-slot="top" data-empty="Nothing here yet."></div>
+    </div>
+</section>
+
+<section class="band sheet" id="journal">
+    <div class="tag" data-reveal>
+        <span class="tag__no">09</span>
+        <span class="tag__name">Journal</span>
+        <span class="tag__fill"></span>
+        <a href="/journal" class="agate agate--accent link">All entries &rarr;</a>
+    </div>
+
+    <div class="briefs" data-slot="journal">
+        <p class="brief__dek" style="padding:1.75rem 0">Loading&hellip;</p>
+    </div>
+</section>
+
+</main>
+
+<footer class="sheet">
+    <div class="rule rule--hard"></div>
+    <div class="colophon">
+        <div>
+            <div class="agate" style="margin-bottom:0.4rem">Brooks Jackson &middot; bjaxqq</div>
+            <div class="agate agate--faint">
+                Set in Instrument Serif, Newsreader &amp; IBM&nbsp;Plex&nbsp;Mono.
+                Stats updated <span id="generated">&mdash;</span>.
+            </div>
+        </div>
+        <nav class="colophon__links" aria-label="Links">
+            <a href="https://github.com/bjaxqq" class="link" target="_blank" rel="me noopener">Work</a>
+            <a href="mailto:contact@brooksjackson.me" class="link">Contact</a>
+        </nav>
+    </div>
+</footer>
+
+<script src="/js/vendor/lenis.min.js"></script>
+<script type="module" src="/js/front.js"></script>
 </body>
 </html>

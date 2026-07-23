@@ -1,0 +1,94 @@
+{
+  "generated": "2026-07-22T15:12:00.000Z",
+  "books": {
+    "ok": true,
+    "state": "live",
+    "reading": [
+      {
+        "title": "Blindsight",
+        "author": "Peter Watts",
+        "cover": null,
+        "rating": null,
+        "date": null,
+        "started": "2026-07-06T00:00:00.000Z",
+        "progress": null,
+        "note": "Picked up 6 July"
+      }
+    ],
+    "read": [
+      { "title": "The Dispossessed", "author": "Ursula K. Le Guin", "cover": null, "rating": 5, "date": "2026-07-02T00:00:00.000Z", "url": "#" },
+      { "title": "Piranesi", "author": "Susanna Clarke", "cover": null, "rating": 4, "date": "2026-06-19T00:00:00.000Z", "url": "#" },
+      { "title": "The Art of Doing Science and Engineering", "author": "Richard Hamming", "cover": null, "rating": 5, "date": "2026-06-01T00:00:00.000Z", "url": "#" },
+      { "title": "Stoner", "author": "John Williams", "cover": null, "rating": 4, "date": "2026-05-11T00:00:00.000Z", "url": "#" },
+      { "title": "A Canticle for Leibowitz", "author": "Walter M. Miller Jr.", "cover": null, "rating": 4, "date": "2026-04-28T00:00:00.000Z", "url": "#" },
+      { "title": "The Peregrine", "author": "J. A. Baker", "cover": null, "rating": 5, "date": "2026-04-02T00:00:00.000Z", "url": "#" }
+    ],
+    "totals": { "year": 23, "reading": 1 }
+  },
+  "films": {
+    "ok": true,
+    "state": "live",
+    "recent": [
+      { "title": "La Haine", "year": "1995", "rating": 4.5, "watched": "2026-07-19T00:00:00.000Z", "rewatch": false, "poster": null, "url": "#" },
+      { "title": "Chungking Express", "year": "1994", "rating": 5, "watched": "2026-07-15T00:00:00.000Z", "rewatch": true, "poster": null, "url": "#" },
+      { "title": "The Zone of Interest", "year": "2023", "rating": 4, "watched": "2026-07-11T00:00:00.000Z", "rewatch": false, "poster": null, "url": "#" },
+      { "title": "Paris, Texas", "year": "1984", "rating": 4.5, "watched": "2026-07-04T00:00:00.000Z", "rewatch": false, "poster": null, "url": "#" },
+      { "title": "Perfect Days", "year": "2023", "rating": 4.5, "watched": "2026-06-27T00:00:00.000Z", "rewatch": false, "poster": null, "url": "#" },
+      { "title": "Heat", "year": "1995", "rating": 4, "watched": "2026-06-21T00:00:00.000Z", "rewatch": true, "poster": null, "url": "#" },
+      { "title": "Stalker", "year": "1979", "rating": 5, "watched": "2026-06-14T00:00:00.000Z", "rewatch": false, "poster": null, "url": "#" }
+    ],
+    "totals": { "total": 642, "year": 87, "latest": "La Haine" }
+  },
+  "sound": {
+    "ok": true,
+    "state": "live",
+    "now": {
+      "playing": true,
+      "title": "Weightless",
+      "artist": "Marconi Union",
+      "album": "Weightless",
+      "art": null,
+      "url": "#"
+    },
+    "artists": [
+      { "name": "Boards of Canada", "genre": "ambient techno", "art": null, "url": "#" },
+      { "name": "Nujabes", "genre": "jazz hop", "art": null, "url": "#" },
+      { "name": "Aphex Twin", "genre": "intelligent dance music", "art": null, "url": "#" },
+      { "name": "Fleet Foxes", "genre": "chamber folk", "art": null, "url": "#" },
+      { "name": "Burial", "genre": "future garage", "art": null, "url": "#" }
+    ],
+    "tracks": [
+      { "title": "Roygbiv", "artist": "Boards of Canada", "art": null, "url": "#" },
+      { "title": "Feather", "artist": "Nujabes, Cise Starr", "art": null, "url": "#" },
+      { "title": "Xtal", "artist": "Aphex Twin", "art": null, "url": "#" },
+      { "title": "Archie, Marry Me", "artist": "Alvvays", "art": null, "url": "#" },
+      { "title": "Archangel", "artist": "Burial", "art": null, "url": "#" }
+    ],
+    "totals": { "artists": 31, "plays": 50, "top": "Boards of Canada" }
+  },
+  "osu": {
+    "ok": true,
+    "state": "live",
+    "user": { "name": "bjaxqq", "avatar": null, "country": "US", "url": "#", "joined": "2019-03-14T00:00:00.000Z" },
+    "stats": {
+      "globalRank": 12481,
+      "countryRank": 2104,
+      "pp": 4102,
+      "accuracy": 98.21,
+      "playCount": 84213,
+      "level": 99,
+      "levelProgress": 41,
+      "rankedScore": 18402113904,
+      "maxCombo": 2104,
+      "hoursPlayed": 1842
+    },
+    "top": [
+      { "title": "Freedom Dive", "artist": "xi", "difficulty": "FOUR DIMENSIONS", "stars": 7.71, "pp": 412, "accuracy": 98.94, "rank": "S", "mods": ["HD", "DT"], "url": "#" },
+      { "title": "Blue Zenith", "artist": "xi", "difficulty": "FOUR DIMENSIONS", "stars": 7.62, "pp": 388, "accuracy": 97.12, "rank": "A", "mods": ["HR"], "url": "#" },
+      { "title": "Kimi no Shiranai Monogatari", "artist": "supercell", "difficulty": "Sky", "stars": 6.41, "pp": 341, "accuracy": 99.31, "rank": "S", "mods": [], "url": "#" },
+      { "title": "Big Black", "artist": "The Quick Brown Fox", "difficulty": "WHO'S AFRAID OF THE BIG BLACK", "stars": 6.31, "pp": 318, "accuracy": 98.02, "rank": "S", "mods": ["HD"], "url": "#" },
+      { "title": "Through the Fire and Flames", "artist": "DragonForce", "difficulty": "Insane", "stars": 6.12, "pp": 302, "accuracy": 96.88, "rank": "A", "mods": ["DT"], "url": "#" },
+      { "title": "Sidetracked Day", "artist": "VINXIS", "difficulty": "Sidetracked", "stars": 6.86, "pp": 297, "accuracy": 97.44, "rank": "S", "mods": ["HD"], "url": "#" }
+    ]
+  }
+}
