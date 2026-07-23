@@ -6,13 +6,17 @@ const TIMEOUT = 12000;
 
 function config() {
     const userId = process.env.GOODREADS_USER_ID;
+  
     if (!userId) throw new NotConfigured('GOODREADS_USER_ID');
+  
     return { userId, key: process.env.GOODREADS_RSS_KEY || '' };
 }
 
 function feedUrl({ userId, key }, shelf) {
     const params = new URLSearchParams({ shelf, sort: 'date_read', order: 'd' });
+  
     if (key) params.set('key', key);
+  
     return `${BASE}/${encodeURIComponent(userId)}?${params}`;
 }
 
@@ -38,10 +42,12 @@ async function progress({ userId }) {
     );
 
     const byTitle = new Map();
+  
     for (const block of items(xml)) {
         const title = tag(block, 'title') || '';
 
         const m = /\bis on page\s+([\d,]+)\s+of\s+([\d,]+)\s+of\s+(.+)$/is.exec(title.replace(/\s+/g, ' ').trim());
+  
         if (!m) continue;
 
         const book = m[3].trim().replace(/[.\s]+$/, '');
@@ -53,22 +59,27 @@ async function progress({ userId }) {
             });
         }
     }
+  
     return byTitle;
 }
 
 function matchProgress(map, title) {
     const key = String(title || '').toLowerCase().trim();
+  
     if (!key) return null;
+  
     if (map.has(key)) return map.get(key);
 
     for (const [name, value] of map) {
         if (key.startsWith(name) || name.startsWith(key)) return value;
     }
+  
     return null;
 }
 
 async function shelf(cfg, name) {
     const xml = await reqText(feedUrl(cfg, name), {}, TIMEOUT);
+  
     return items(xml).map(parseBook).filter((b) => b.title);
 }
 
@@ -92,6 +103,7 @@ export async function goodreads() {
         profileUrl: `https://www.goodreads.com/user/show/${encodeURIComponent(cfg.userId)}`,
         reading: reading.slice(0, 3).map((b, i) => {
             const live = matchProgress(progressByTitle, b.title);
+  
             return {
                 ...b,
                 page: live?.page ?? (i === 0 && hasManual ? manual : null),
@@ -100,6 +112,7 @@ export async function goodreads() {
             };
         }),
         read: read.slice(0, 8),
+  
         totals: {
             year: finishedThisYear,
             reading: reading.length,

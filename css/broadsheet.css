@@ -12,8 +12,8 @@
     --rule-soft:    rgba(20, 17, 15, 0.10);
     --rule-hard:    rgba(20, 17, 15, 0.72);
 
-    --accent:       #b3341f;
-    --accent-soft:  rgba(179, 52, 31, 0.12);
+    --accent:       #254186;
+    --accent-soft:  rgba(37, 65, 134, 0.12);
 
     --display: "Instrument Serif", "Times New Roman", Times, serif;
     --text:    "Newsreader", Georgia, "Times New Roman", serif;
@@ -50,8 +50,8 @@
         --rule:        rgba(239, 233, 222, 0.20);
         --rule-soft:   rgba(239, 233, 222, 0.10);
         --rule-hard:   rgba(239, 233, 222, 0.68);
-        --accent:      #e2603f;
-        --accent-soft: rgba(226, 96, 63, 0.14);
+        --accent:      #7184b0;
+        --accent-soft: rgba(113, 132, 176, 0.16);
     }
 }
 
@@ -66,8 +66,8 @@
     --rule:        rgba(239, 233, 222, 0.20);
     --rule-soft:   rgba(239, 233, 222, 0.10);
     --rule-hard:   rgba(239, 233, 222, 0.68);
-    --accent:      #e2603f;
-    --accent-soft: rgba(226, 96, 63, 0.14);
+    --accent:      #7184b0;
+    --accent-soft: rgba(113, 132, 176, 0.16);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -75,6 +75,20 @@
 html {
     background: var(--paper);
     -webkit-text-size-adjust: 100%;
+}
+
+/* Theme crossfade — every colour on the page is one of the CSS variables
+   above, so a baseline transition on the properties that consume them makes
+   flipping data-theme (or the OS scheme underneath it) fade smoothly instead
+   of cutting. Low specificity: any element with its own tuned transition
+   (links, hovers, reveals) keeps using that instead — this is only the
+   fallback for everything that doesn't set one. */
+@media (prefers-reduced-motion: no-preference) {
+    *, *::before, *::after {
+        transition: background-color 0.6s var(--quart), color 0.6s var(--quart),
+            border-color 0.6s var(--quart), fill 0.6s var(--quart),
+            box-shadow 0.6s var(--quart);
+    }
 }
 
 body {

@@ -7,7 +7,9 @@ const PAGE = 1000;
 function config() {
     const clientId = process.env.MAL_CLIENT_ID;
     const user = process.env.MAL_USER;
+   
     if (!clientId || !user) throw new NotConfigured('MAL_CLIENT_ID / MAL_USER');
+   
     return { clientId, user };
 }
 
@@ -29,10 +31,13 @@ async function list({ clientId, user }, kind, status, fields) {
                 + 'Privacy, set your anime and manga list visibility to public.'
             );
         }
+   
         if (res.status === 404) throw new Error(`No MyAnimeList user "${user}"`);
+   
         if (!res.ok) throw new Error(`MyAnimeList responded ${res.status}`);
 
         const data = await res.json();
+   
         out.push(...(Array.isArray(data.data) ? data.data : []));
         url = data.paging?.next || null;
     }
@@ -65,8 +70,11 @@ const entry = (kind) => (item) => {
 
 function byFinished(a, b) {
     if (a.finished && b.finished) return a.finished < b.finished ? 1 : a.finished > b.finished ? -1 : 0;
+   
     if (a.finished) return -1;
+   
     if (b.finished) return 1;
+   
     return String(b.updated || '').localeCompare(String(a.updated || ''));
 }
 
@@ -92,20 +100,24 @@ export async function mal() {
 
     return {
         user: cfg.user,
+   
         anime: {
             profileUrl: `https://myanimelist.net/animelist/${encodeURIComponent(cfg.user)}`,
             watching: anime.watching.slice(0, 5),
             completed: anime.completed.slice(0, 5),
+   
             totals: {
                 completed: anime.completed.length,
                 inProgress: anime.watching.length,
                 units: sum(anime.completed) + sum(anime.watching),
             },
         },
+   
         manga: {
             profileUrl: `https://myanimelist.net/mangalist/${encodeURIComponent(cfg.user)}`,
             reading: manga.reading.slice(0, 5),
             completed: manga.completed.slice(0, 5),
+   
             totals: {
                 completed: manga.completed.length,
                 inProgress: manga.reading.length,

@@ -7,9 +7,11 @@ function config() {
     const clientId = process.env.OSU_CLIENT_ID;
     const clientSecret = process.env.OSU_CLIENT_SECRET;
     const user = process.env.OSU_USER;
+ 
     if (!clientId || !clientSecret || !user) {
         throw new NotConfigured('OSU_CLIENT_ID / OSU_CLIENT_SECRET / OSU_USER');
     }
+ 
     return { clientId, clientSecret, user };
 }
 
@@ -26,6 +28,7 @@ async function accessToken({ clientId, clientSecret }) {
     });
 
     if (!data.access_token) throw new Error('osu! refused the client credentials');
+ 
     return data.access_token;
 }
 
@@ -55,6 +58,7 @@ export async function osu() {
             url: `https://osu.ppy.sh/users/${user.id}`,
             joined: user.join_date,
         },
+ 
         stats: {
             globalRank: s.global_rank ?? null,
             countryRank: s.country_rank ?? null,
@@ -67,6 +71,7 @@ export async function osu() {
             maxCombo: s.maximum_combo ?? null,
             hoursPlayed: s.play_time ? Math.round(s.play_time / 3600) : null,
         },
+ 
         top: (Array.isArray(best) ? best : []).map((score) => ({
             title: score.beatmapset?.title || 'Unknown',
             artist: score.beatmapset?.artist || null,
