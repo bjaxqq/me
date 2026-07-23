@@ -19,6 +19,7 @@ function inline(text) {
             '<img src="$2" alt="$1" loading="lazy" decoding="async">')
         .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, href) => {
             const external = /^https?:\/\//.test(href);
+            
             return `<a class="link" href="${href}"${external ? ' target="_blank" rel="noopener"' : ''}>${label}</a>`;
         })
         .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
@@ -28,24 +29,29 @@ function inline(text) {
 
 export function render(markdown = '') {
     const code = [];
+    
     let src = String(markdown).replace(/\r\n?/g, '\n');
 
     src = src.replace(/```([a-z0-9-]*)\n([\s\S]*?)```/gi, (_, lang, body) => {
         code.push(`<pre class="code"${lang ? ` data-lang="${esc(lang)}"` : ''}><code>${esc(body.replace(/\n$/, ''))}</code></pre>`);
+    
         return `[[BLOCK${code.length - 1}]]`;
     });
 
     src = src.replace(/`([^`\n]+)`/g, (_, body) => {
         code.push(`<code class="code-inline">${esc(body)}</code>`);
+    
         return `[[BLOCK${code.length - 1}]]`;
     });
 
     const blocks = esc(src).split(/\n{2,}/);
     const html = [];
+    
     let lead = true;
 
     for (const raw of blocks) {
         const block = raw.trim();
+    
         if (!block) continue;
 
         if (/^\[\[BLOCK\d+\]\]$/.test(block)) { html.push(block); continue; }
@@ -56,6 +62,7 @@ export function render(markdown = '') {
         }
 
         const heading = block.match(/^(#{2,4})\s+(.*)$/);
+    
         if (heading) {
             const level = heading[1].length;
             html.push(`<h${level}>${inline(heading[2])}</h${level}>`);
@@ -87,6 +94,7 @@ export function render(markdown = '') {
         }
 
         const body = inline(block.split('\n').join(' '));
+    
         html.push(`<p${lead ? ' class="dropcap"' : ''}>${body}</p>`);
         lead = false;
     }

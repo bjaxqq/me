@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Brooks Jackson</title>
     <meta name="description" content="Brooks Jackson — software and photographs, plus what I've been reading, watching and playing.">
     <meta name="theme-color" content="#f4f1ea">
+    
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
     <meta property="og:title" content="Brooks Jackson">
@@ -20,10 +22,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap">
     <link rel="stylesheet" href="/css/broadsheet.css">
     <link rel="stylesheet" href="/css/front.css">
+    
     <script>
         document.documentElement.classList.add('js');
+    
         try {
             var t = localStorage.getItem('edition');
+    
             if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
         } catch (e) {}
     </script>
@@ -35,6 +40,7 @@
 <div class="sectionbar" id="sectionbar">
     <div class="sheet sectionbar__inner">
         <a href="#top" class="sectionbar__name">Brooks Jackson</a>
+
         <nav class="sectionbar__nav" aria-label="Sections">
             <a href="#lead">About</a>
             <a href="#index">Stats</a>
@@ -63,8 +69,9 @@
 
     <div class="masthead__foot">
         <p class="masthead__strap" data-reveal style="--delay:640ms">
-            Software, photographs, and what I&rsquo;ve been reading, watching and playing.
+            An insight into my hobbies, interests, and what I'm currently reading, watching, listening to, and playing.
         </p>
+        
         <nav class="masthead__index" aria-label="Page sections" data-reveal style="--delay:720ms">
             <a href="#lead" class="link">About</a>
             <a href="#index" class="link">Stats</a>
@@ -92,30 +99,44 @@
     <div class="lead-grid">
         <div class="lead-grid__body">
             <p class="lead dropcap" data-reveal>
-                I&rsquo;m Brooks, a software developer.
+                I&rsquo;m Brooks, a software developer. When I'm not at work, I love creating cool projects like this website, practicing photography, playing guitar, reading books and manga, and watching films and anime.
             </p>
+        
             <p data-reveal style="--delay:100ms">
-                
+                I decided to create this website as a way to track all those hobbies in one place that's easy to access and so other people can view what I'm up to. There's also a journal section where I write about my thoughts and experiences.
             </p>
+        
             <p data-reveal style="--delay:160ms">
-                
+                Combining APIs from Goodreads, MyAnimeList, Letterboxd, Spotify, and osu!, I'm able to give live updates on what media I'm consuming.
+            </p>
+
+            <p data-reveal style="--delay:160ms">
+                If you like this site and its design, feel free to check out my work portfolio on the right. It showcases some of the other projects I've worked on outside of work, and gives more insight into my professional experience and skills.
+            </p>
+        
+            <p data-reveal style="--delay:160ms">
+                If you have any questions or simply want to say hi, you can reach me via email (which is also on the right sidebar).
             </p>
         </div>
 
         <aside class="glance" data-reveal style="--delay:220ms" aria-label="Details">
             <div class="agate agate--faint glance__head">Details</div>
+    
             <div class="glance__row">
                 <span class="glance__k">Role</span>
                 <span class="glance__v">Software Developer</span>
             </div>
+    
             <div class="glance__row">
                 <span class="glance__k">Journal</span>
                 <span class="glance__v"><a href="/journal" class="link link--ruled">Read it here</a></span>
             </div>
+    
             <div class="glance__row">
                 <span class="glance__k">Work</span>
                 <span class="glance__v"><a href="https://github.com/bjaxqq" class="link link--ruled" rel="me noopener" target="_blank">github.com/bjaxqq</a></span>
             </div>
+    
             <div class="glance__row">
                 <span class="glance__k">Contact</span>
                 <span class="glance__v"><a href="mailto:contact@brooksjackson.me" class="link link--ruled">contact@brooksjackson.me</a></span>
@@ -138,47 +159,64 @@
                 <span class="agate">Books</span>
                 <span class="agate agate--faint">&rsquo;26</span>
             </div>
+        
             <span class="numeral ledger__num" data-count data-bind="books.totals.year">&mdash;</span>
+        
             <p class="ledger__sub">Finished this year<br><b data-bind="books.totals.reading">&mdash;</b> on the go right now</p>
         </div>
+    
         <div class="ledger__cell" data-reveal style="--delay:70ms">
             <div class="ledger__label">
                 <span class="agate">Manga</span>
                 <span class="agate agate--faint">All time</span>
             </div>
+        
             <span class="numeral ledger__num" data-count data-bind="manga.totals.completed">&mdash;</span>
+        
             <p class="ledger__sub">Series completed<br><b data-bind="manga.totals.units">&mdash;</b> chapters read</p>
         </div>
+    
         <div class="ledger__cell" data-reveal style="--delay:140ms">
             <div class="ledger__label">
                 <span class="agate">Film</span>
                 <span class="agate agate--faint">All time</span>
             </div>
+    
             <span class="numeral ledger__num" data-count data-bind="films.totals.total">&mdash;</span>
+    
             <p class="ledger__sub"><b data-bind="films.totals.year">&mdash;</b> logged this year<br>Latest: <b data-bind="films.totals.latest">&mdash;</b></p>
         </div>
+        
         <div class="ledger__cell" data-reveal style="--delay:210ms">
             <div class="ledger__label">
                 <span class="agate">Anime</span>
                 <span class="agate agate--faint">All time</span>
             </div>
+        
             <span class="numeral ledger__num" data-count data-bind="anime.totals.completed">&mdash;</span>
+        
             <p class="ledger__sub">Series completed<br><b data-bind="anime.totals.units">&mdash;</b> episodes watched</p>
         </div>
+        
         <div class="ledger__cell" data-reveal style="--delay:280ms">
             <div class="ledger__label">
                 <span class="agate">Music</span>
                 <span class="agate agate--faint">7 days</span>
             </div>
+        
             <span class="numeral ledger__num" data-count data-bind="sound.totals.minutes">&mdash;</span>
+        
             <p class="ledger__sub"><span data-slot="music-note">Minutes listened</span><br>Most played: <b data-bind="sound.totals.top">&mdash;</b></p>
         </div>
+        
         <div class="ledger__cell" data-reveal style="--delay:350ms">
             <div class="ledger__label">
                 <span class="agate">osu!</span>
                 <span class="agate agate--faint">std</span>
             </div>
+        
             <span class="numeral ledger__num" data-count data-prefix="#" data-bind="osu.stats.globalRank">&mdash;</span>
+        
             <p class="ledger__sub">Rank worldwide<br><b data-bind="osu.stats.pp">&mdash;</b> performance points</p>
         </div>
     </div>
@@ -187,6 +225,7 @@
 <section class="panel sheet" id="books" data-source="books" data-state="loading">
     <div class="panel__head">
         <h2 class="panel__title" data-reveal><small>03 &mdash; Goodreads</small>Books</h2>
+        
         <span class="wire" data-wire>Loading</span>
     </div>
 
@@ -206,6 +245,7 @@
 <section class="panel sheet" id="manga" data-source="manga" data-state="loading">
     <div class="panel__head">
         <h2 class="panel__title" data-reveal><small>04 &mdash; MyAnimeList</small>Manga</h2>
+        
         <span class="wire" data-wire>Loading</span>
     </div>
 
@@ -214,6 +254,7 @@
             <div class="panel__colhead">Currently reading</div>
             <div data-slot="current" data-empty="Nothing here yet."></div>
         </div>
+        
         <div data-reveal style="--delay:120ms">
             <div class="panel__colhead">Last five completed</div>
             <div data-slot="completed" data-empty="Nothing here yet."></div>
@@ -224,6 +265,7 @@
 <section class="panel sheet" id="film" data-source="films" data-state="loading">
     <div class="panel__head">
         <h2 class="panel__title" data-reveal><small>05 &mdash; Letterboxd</small>Film</h2>
+        
         <span class="wire" data-wire>Loading</span>
     </div>
 
@@ -232,6 +274,7 @@
             <div class="panel__colhead">Last watched</div>
             <div data-slot="latest" data-empty="Nothing here yet."></div>
         </div>
+        
         <div data-reveal style="--delay:120ms">
             <div class="panel__colhead">Recently watched</div>
             <div data-slot="recent" data-empty="Nothing here yet."></div>
@@ -242,6 +285,7 @@
 <section class="panel sheet" id="anime" data-source="anime" data-state="loading">
     <div class="panel__head">
         <h2 class="panel__title" data-reveal><small>06 &mdash; MyAnimeList</small>Anime</h2>
+        
         <span class="wire" data-wire>Loading</span>
     </div>
 
@@ -250,6 +294,7 @@
             <div class="panel__colhead">Currently watching</div>
             <div data-slot="current" data-empty="Nothing here yet."></div>
         </div>
+        
         <div data-reveal style="--delay:120ms">
             <div class="panel__colhead">Last five completed</div>
             <div data-slot="completed" data-empty="Nothing here yet."></div>
@@ -260,6 +305,7 @@
 <section class="panel sheet" id="sound" data-source="sound" data-state="loading">
     <div class="panel__head">
         <h2 class="panel__title" data-reveal><small>07 &mdash; Spotify</small>Music</h2>
+        
         <span class="wire" data-wire>Loading</span>
     </div>
 
@@ -269,6 +315,7 @@
                 <span class="ticker__dot" data-slot="np-dot"></span>
                 <span class="agate agate--faint" data-slot="np-label">Not playing</span>
             </span>
+        
             <span class="ticker__viewport">
                 <span class="ticker__track" data-slot="np-track">
                     <span>Nothing playing right now</span>
@@ -283,6 +330,7 @@
             <div class="panel__colhead">Top artists &mdash; last 4 weeks</div>
             <div data-slot="artists" data-empty="Nothing here yet."></div>
         </div>
+        
         <div data-reveal style="--delay:120ms">
             <div class="panel__colhead">Top tracks &mdash; last 4 weeks</div>
             <div data-slot="tracks" data-empty="Nothing here yet."></div>
@@ -293,6 +341,7 @@
 <section class="panel sheet" id="osu" data-source="osu" data-state="loading">
     <div class="panel__head">
         <h2 class="panel__title" data-reveal><small>08 &mdash; osu!standard</small>osu!</h2>
+        
         <span class="wire" data-wire>Loading</span>
     </div>
 
@@ -330,14 +379,17 @@
 
 <footer class="sheet">
     <div class="rule rule--hard"></div>
+    
     <div class="colophon">
         <div>
             <div class="agate" style="margin-bottom:0.4rem">Brooks Jackson &middot; bjaxqq</div>
+    
             <div class="agate agate--faint">
                 Set in Instrument Serif, Newsreader &amp; IBM&nbsp;Plex&nbsp;Mono.
                 Stats updated <span id="generated">&mdash;</span>.
             </div>
         </div>
+    
         <nav class="colophon__links" aria-label="Links">
             <a href="https://github.com/bjaxqq" class="link" target="_blank" rel="me noopener">Work</a>
             <a href="mailto:contact@brooksjackson.me" class="link">Contact</a>
@@ -346,6 +398,8 @@
 </footer>
 
 <script src="/js/vendor/lenis.min.js"></script>
+
 <script type="module" src="/js/front.js"></script>
+
 </body>
 </html>

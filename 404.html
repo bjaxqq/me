@@ -3,22 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>404 — Brooks Jackson</title>
+    
     <meta name="description" content="Page not found.">
     <meta name="robots" content="noindex">
     <meta name="theme-color" content="#f4f1ea">
+    
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap">
     <link rel="stylesheet" href="/css/broadsheet.css">
+    
     <script>
         document.documentElement.classList.add('js');
         try {
             var t = localStorage.getItem('edition');
+
             if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
         } catch (e) {}
     </script>
+    
     <style>
         body { display: flex; flex-direction: column; min-height: 100vh; }
         main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
@@ -52,10 +58,12 @@
 
 <main class="sheet">
     <div class="rule rule--soft"></div>
+
     <div class="dateline agate" style="display:flex;justify-content:space-between;align-items:center;padding-block:0.85rem">
         <span>Error 404</span>
         <button class="theme-toggle" type="button" data-theme-toggle>Dark</button>
     </div>
+    
     <div class="rule rule--hard"></div>
 
     <div class="four-grid">
@@ -81,7 +89,9 @@
 
 <script type="module">
     import { initTheme } from '/js/theme.js';
+
     initTheme();
 </script>
+
 </body>
 </html>

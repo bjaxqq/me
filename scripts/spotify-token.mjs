@@ -11,10 +11,12 @@ const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 
 function fail(message) {
     console.error(message);
+
     process.exitCode = 1;
 }
 
 let envText = '';
+
 try {
     envText = await readFile(ENV, 'utf8');
 } catch {
@@ -57,9 +59,11 @@ async function exchange(code) {
     });
 
     const data = await res.json();
+
     if (!res.ok || !data.refresh_token) {
         throw new Error(data.error_description || data.error || `HTTP ${res.status}`);
     }
+
     return data.refresh_token;
 }
 
@@ -81,6 +85,7 @@ function openBrowser(url) {
                 : ['xdg-open', [url]];
 
         spawn(cmd, args, { stdio: 'ignore', detached: true }).unref();
+
         return true;
     } catch {
         return false;
@@ -91,6 +96,7 @@ async function main() {
     if (process.exitCode) return;
 
     let redirectUrl;
+
     try {
         redirectUrl = new URL(REDIRECT);
     } catch {
@@ -166,11 +172,13 @@ async function main() {
                 + '<b>.env</b> and never shown.',
                 `<a class="go" href="${authUrl}">Authorise with Spotify</a>`,
             ));
+
             return;
         }
 
         if (url.pathname !== CALLBACK_PATH) {
             send(404, page('Wrong path', `Waiting on <b>${CALLBACK_PATH}</b>, not ${url.pathname}.`));
+
             return;
         }
 
@@ -181,24 +189,29 @@ async function main() {
                 + `<b>http://${HOST}:${PORT}</b> instead.`,
                 `<a class="go" href="/">Start over</a>`,
             ));
+
             return;
         }
 
         if (url.searchParams.get('error')) {
             send(400, page('Denied', 'Authorisation was declined. Nothing was saved.'));
             fail(`\n  Declined: ${url.searchParams.get('error')}\n`);
+
             return done(server);
         }
 
         if (url.searchParams.get('state') !== state) {
             send(400, page('Mismatch', 'State did not match. Run the script again.'));
             fail('\n  State mismatch — possible cross-site request. Aborted.\n');
+
             return done(server);
         }
 
         try {
             await save(await exchange(url.searchParams.get('code')));
+
             send(200, page('Connected', 'Refresh token saved to <b>.env</b>. You can close this tab.'));
+
             console.log(`
   Saved SPOTIFY_REFRESH_TOKEN to .env — the value was not printed.
 
@@ -235,6 +248,7 @@ async function main() {
 `);
 
         if (process.argv.includes('--no-open')) return;
+
         if (!openBrowser(start)) {
             console.log(`  (Could not launch a browser — open ${start} yourself.)\n`);
         }

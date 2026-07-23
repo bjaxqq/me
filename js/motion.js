@@ -4,9 +4,11 @@ let lenis = null;
 
 export function initScroll() {
     const Lenis = window.Lenis;
+    
     if (reduced || typeof Lenis !== 'function') {
         document.documentElement.style.scrollBehavior = reduced ? 'auto' : 'smooth';
         bindAnchors(null);
+    
         return null;
     }
 
@@ -24,24 +26,32 @@ export function initScroll() {
     requestAnimationFrame(raf);
 
     bindAnchors(lenis);
+    
     return lenis;
 }
 
 function bindAnchors(instance) {
     document.addEventListener('click', (e) => {
         const a = e.target.closest('a[href^="#"]');
+    
         if (!a) return;
+    
         const id = a.getAttribute('href');
+    
         if (id === '#' || id.length < 2) return;
+    
         const target = document.querySelector(id);
+    
         if (!target) return;
 
         e.preventDefault();
+    
         if (instance) {
             instance.scrollTo(target, { offset: -72, duration: 1.4 });
         } else {
             target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
         }
+    
         history.replaceState(null, '', id);
 
         window.setTimeout(sweep, 1500);
@@ -52,6 +62,7 @@ let revealObserver = null;
 
 export function reveal(el) {
     el.classList.add('is-in');
+
     if (!el.classList.contains('rise')) return;
 
     const open = () => { el.style.overflow = 'visible'; };
@@ -60,15 +71,18 @@ export function reveal(el) {
     if (reduced || !inner) { open(); return; }
 
     inner.addEventListener('transitionend', open, { once: true });
+
     window.setTimeout(open, 2200);
 }
 
 export function initReveals(root = document) {
     const targets = root.querySelectorAll('[data-reveal]:not(.is-in), .rise:not(.is-in)');
+
     if (!targets.length) return;
 
     if (reduced) {
         targets.forEach(reveal);
+
         return;
     }
 
@@ -91,6 +105,7 @@ let sweeping = false;
 export function sweep() {
     const fold = window.innerHeight * 1.05;
     const pending = document.querySelectorAll('[data-reveal]:not(.is-in), .rise:not(.is-in)');
+
     let left = 0;
 
     pending.forEach((el) => {
@@ -103,13 +118,17 @@ export function sweep() {
 
 function startSweep() {
     if (sweeping) return;
+
     sweeping = true;
 
     let timer = null;
+
     const onScroll = () => {
         if (timer) return;
+
         timer = window.setTimeout(() => {
             timer = null;
+
             if (sweep() === 0) stop();
         }, 60);
     };
@@ -128,8 +147,10 @@ const nf = new Intl.NumberFormat('en-US');
 
 export function countUp(el, value, { decimals = 0, prefix = '', suffix = '' } = {}) {
     const target = Number(value);
+
     if (!Number.isFinite(target)) {
         el.textContent = '—';
+
         return;
     }
 
@@ -141,6 +162,7 @@ export function countUp(el, value, { decimals = 0, prefix = '', suffix = '' } = 
 
     if (reduced || target === 0) {
         render(target);
+
         return;
     }
 
@@ -150,16 +172,22 @@ export function countUp(el, value, { decimals = 0, prefix = '', suffix = '' } = 
         const step = (now) => {
             const t = Math.min(1, (now - start) / duration);
             const eased = 1 - Math.pow(1 - t, 4);
+
             render(target * eased);
+
             if (t < 1) requestAnimationFrame(step);
         };
+
         requestAnimationFrame(step);
     };
 
     let counted = false;
+
     const once = () => {
         if (counted) return;
+
         counted = true;
+
         io.disconnect();
         run();
     };
@@ -173,6 +201,7 @@ export function countUp(el, value, { decimals = 0, prefix = '', suffix = '' } = 
         if (counted) return;
 
         counted = true;
+
         io.disconnect();
         render(target);
     }, 2600);
@@ -186,10 +215,12 @@ export function initChrome() {
         const sentinel = new IntersectionObserver(([entry]) => {
             bar.classList.toggle('is-in', !entry.isIntersecting);
         }, { rootMargin: '-40% 0px 0px 0px' });
+
         sentinel.observe(masthead);
     }
 
     const links = [...document.querySelectorAll('.sectionbar__nav a[href^="#"]')];
+
     if (!links.length) return;
 
     const sections = links
@@ -199,6 +230,7 @@ export function initChrome() {
     const spy = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
+
             links.forEach((a) => {
                 a.setAttribute('aria-current', a.getAttribute('href') === `#${entry.target.id}` ? 'true' : 'false');
             });
@@ -210,7 +242,9 @@ export function initChrome() {
 
 export function fitLines(container, { max = 400, min = 28 } = {}) {
     if (!container) return;
+
     const lines = [...container.querySelectorAll('[data-fit]')];
+
     if (!lines.length) return;
 
     const TARGET = 0.995;
@@ -218,6 +252,7 @@ export function fitLines(container, { max = 400, min = 28 } = {}) {
 
     const apply = () => {
         const width = container.clientWidth;
+
         if (!width) return;
 
         lines.forEach((line) => {
@@ -225,6 +260,7 @@ export function fitLines(container, { max = 400, min = 28 } = {}) {
             const range = document.createRange();
             const advance = () => {
                 range.selectNodeContents(target);
+
                 return range.getBoundingClientRect().width;
             };
 
@@ -236,18 +272,22 @@ export function fitLines(container, { max = 400, min = 28 } = {}) {
                 line.style.textIndent = '0px';
 
                 const natural = advance();
+
                 if (!natural) { line.style.fontSize = ''; return; }
 
                 bleed = inkBleed(target);
                 const total = natural + bleed.left + bleed.right;
 
                 const next = Math.max(min, Math.min(max, size * ((width * TARGET) / total)));
+
                 if (Math.abs(next - size) < 0.25) { size = next; break; }
+
                 size = next;
             }
 
             line.style.fontSize = `${size.toFixed(2)}px`;
             line.style.textIndent = '0px';
+
             bleed = inkBleed(target);
 
             line.style.textIndent = `${bleed.left.toFixed(2)}px`;
@@ -261,13 +301,17 @@ export function fitLines(container, { max = 400, min = 28 } = {}) {
 
     const refit = (force = false) => {
         const width = container.clientWidth;
+
         if (!force && width === lastWidth) return;
+
         lastWidth = width;
+
         apply();
     };
 
     const schedule = (force = false) => {
         if (frame) cancelAnimationFrame(frame);
+
         frame = requestAnimationFrame(() => refit(force));
     };
 
@@ -289,16 +333,20 @@ function inkBelowBaseline(root) {
     if (!scratch) scratch = document.createElement('canvas').getContext('2d');
 
     let deepest = 0;
+
     const walk = (node) => {
         if (node.nodeType === Node.TEXT_NODE) {
             const text = node.textContent;
             const parent = node.parentElement;
+
             if (!text.trim() || !parent) return;
 
             const cs = getComputedStyle(parent);
             scratch.font = `${cs.fontStyle} ${cs.fontWeight} ${parseFloat(cs.fontSize)}px ${cs.fontFamily}`;
             const d = scratch.measureText(text).actualBoundingBoxDescent;
+
             if (Number.isFinite(d)) deepest = Math.max(deepest, d);
+
             return;
         }
         node.childNodes.forEach(walk);
@@ -313,11 +361,14 @@ function textRuns(root) {
     const walk = (node) => {
         if (node.nodeType === Node.TEXT_NODE) {
             if (node.textContent.trim() && node.parentElement) runs.push(node);
+
             return;
         }
         node.childNodes.forEach(walk);
     };
+
     walk(root);
+
     return runs;
 }
 
@@ -328,15 +379,18 @@ function runFont(node) {
 
 function inkBleed(target) {
     const runs = textRuns(target);
+
     if (!runs.length) return { left: 0, right: 0 };
 
     if (!scratch) scratch = document.createElement('canvas').getContext('2d');
 
     scratch.font = runFont(runs[0]);
-    const first = scratch.measureText(runs[0].textContent);
 
+    const first = scratch.measureText(runs[0].textContent);
     const lastRun = runs[runs.length - 1];
+    
     scratch.font = runFont(lastRun);
+    
     const last = scratch.measureText(lastRun.textContent);
 
     return {
@@ -350,13 +404,18 @@ function descenderOverflow(target) {
 
     const size = parseFloat(getComputedStyle(target).fontSize);
     const below = inkBelowBaseline(target);
+    
     if (!below) return Math.ceil(size * 0.26);
 
     const marker = document.createElement('span');
+    
     marker.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline;';
+    
     target.insertBefore(marker, target.firstChild);
+    
     const baselineY = marker.getBoundingClientRect().top;
     const boxBottom = target.getBoundingClientRect().bottom;
+    
     target.removeChild(marker);
 
     return Math.max(0, Math.ceil(baselineY + below - boxBottom) + 2);

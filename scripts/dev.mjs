@@ -25,8 +25,10 @@ const MIME = {
 
 try {
     const env = await readFile(join(ROOT, '.env'), 'utf8');
+
     for (const line of env.split('\n')) {
         const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
+
         if (m && !process.env[m[1]]) {
             process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
         }
@@ -36,10 +38,12 @@ try {
 
 async function serveFile(res, path, status = 200) {
     const body = await readFile(path);
+
     res.writeHead(status, {
         'Content-Type': MIME[extname(path)] || 'application/octet-stream',
         'Cache-Control': 'no-cache',
     });
+
     res.end(body);
 }
 
@@ -48,24 +52,31 @@ async function exists(path) {
 }
 
 const STARTED = Date.now();
+
 let warnedStale = false;
 
 async function apiIsStale() {
     const dir = join(ROOT, 'api', '_lib');
+
     try {
         const files = await readdir(dir);
+
         for (const f of files) {
             const { mtimeMs } = await stat(join(dir, f));
+
             if (mtimeMs > STARTED) return f;
         }
     } catch {  }
+
     return null;
 }
 
 async function runApi(name, req, res, url) {
     const changed = await apiIsStale();
+
     if (changed && !warnedStale) {
         warnedStale = true;
+
         console.warn(`
   ┌─────────────────────────────────────────────────────────────────┐
   │  api/_lib/${changed.padEnd(20)} changed since this server started.  │
@@ -74,17 +85,22 @@ async function runApi(name, req, res, url) {
   └─────────────────────────────────────────────────────────────────┘
 `);
     }
+
     if (changed) res.setHeader('X-Dev-Stale', changed);
 
     if (MOCK && name === 'stats') {
         const fixture = await readFile(join(ROOT, 'scripts/fixtures/stats.json'), 'utf8');
+
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+
         return res.end(fixture);
     }
 
     const file = join(ROOT, 'api', `${name}.js`);
+
     if (!(await exists(file))) {
         res.writeHead(404, { 'Content-Type': 'application/json' });
+
         return res.end('{"error":"no such endpoint"}');
     }
 
@@ -108,7 +124,9 @@ const server = createServer(async (req, res) => {
         if (/^\/journal\/[^/]+$/.test(path)) path = '/entry.html';
 
         if (path === '/') path = '/index.html';
+
         let file = normalize(join(ROOT, path));
+
         if (!file.startsWith(ROOT)) throw new Error('traversal');
 
         if (!(await exists(file)) && !extname(file)) file += '.html';

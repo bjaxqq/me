@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Journal — Brooks Jackson</title>
+
     <meta name="description" content="Notes and writing from Brooks Jackson.">
     <meta name="theme-color" content="#f4f1ea">
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
     <meta property="og:title" content="Journal — Brooks Jackson">
@@ -18,10 +21,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap">
     <link rel="stylesheet" href="/css/broadsheet.css">
     <link rel="stylesheet" href="/css/journal.css">
+
     <script>
         document.documentElement.classList.add('js');
+
         try {
             var t = localStorage.getItem('edition');
+
             if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
         } catch (e) {}
     </script>
@@ -35,6 +41,7 @@
 
     <div class="jhead__bar">
         <a href="/" class="jhead__back link">&larr; Brooks Jackson</a>
+
         <button class="theme-toggle" type="button" data-theme-toggle>Dark</button>
     </div>
 
@@ -60,8 +67,10 @@
 
 <footer class="sheet">
     <div class="rule rule--hard"></div>
+
     <div class="colophon">
         <div class="agate agate--faint">Brooks Jackson</div>
+
         <nav class="colophon__links" aria-label="Links">
             <a href="/" class="link">Home</a>
             <a href="https://github.com/bjaxqq" class="link" target="_blank" rel="me noopener">GitHub</a>
@@ -71,6 +80,8 @@
 </footer>
 
 <script src="/js/vendor/lenis.min.js"></script>
+
 <script type="module" src="/js/journal.js"></script>
+
 </body>
 </html>

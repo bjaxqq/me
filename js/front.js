@@ -12,13 +12,17 @@ const slot = (root, name) => root.querySelector(`[data-slot="${name}"]`);
 
 function stars(rating) {
     const n = Number(rating);
+
     if (!Number.isFinite(n) || n <= 0) return '';
+    
     const full = Math.floor(n);
+    
     return '★'.repeat(full) + (n - full >= 0.5 ? '½' : '');
 }
 
 function metaDate(label, value) {
     if (!value) return '';
+    
     return `<span class="row__label">${esc(label)}</span> ${esc(value)}`;
 }
 
@@ -28,7 +32,9 @@ function emptyNotice(el) {
 
 function rows(el, items, build) {
     if (!el) return;
+    
     if (!items || !items.length) return emptyNotice(el);
+    
     el.innerHTML = items.map(build).join('');
 }
 
@@ -40,9 +46,13 @@ const WIRE = {
 
 function setState(section, state) {
     if (!section) return;
+    
     const key = WIRE[state] ? state : 'error';
+    
     section.dataset.state = key;
+    
     const wire = section.querySelector('[data-wire]');
+    
     if (wire) {
         wire.textContent = WIRE[key].text;
         wire.className = `wire ${WIRE[key].cls}`.trim();
@@ -57,11 +67,13 @@ function applyBindings(data) {
 
         if (value === null || value === undefined || value === '') {
             el.textContent = '—';
+    
             return;
         }
 
         if (typeof value === 'number') {
             if (el.hasAttribute('data-count')) countUp(el, value, { prefix });
+    
             else el.textContent = prefix + nf.format(value);
         } else {
             el.textContent = prefix + value;
@@ -92,6 +104,7 @@ function renderBooks(section, d) {
     if (reading) {
         if (book) {
             const pages = Number(book.pages);
+    
             reading.innerHTML = `
                 ${book.cover ? `<img class="feature__art" src="${esc(book.cover)}" alt="" loading="lazy" decoding="async">` : ''}
                 <h3 class="feature__title">${book.url ? `<a class="link" href="${esc(book.url)}" target="_blank" rel="noopener">${esc(book.title)}</a>` : esc(book.title)}</h3>
@@ -125,6 +138,7 @@ const REVIEW_LIMIT = 260;
 
 function review(film) {
     const text = (film.review || '').trim();
+    
     if (!text) return '';
 
     const long = text.length > REVIEW_LIMIT;
@@ -191,10 +205,13 @@ function renderNowPlaying(section, now) {
     const dot = slot(section, 'np-dot');
     const label = slot(section, 'np-label');
     const track = slot(section, 'np-track');
+    
     if (!track) return;
 
     const live = Boolean(now?.playing && now?.title);
+    
     if (dot) dot.classList.toggle('is-live', live);
+    
     if (label) {
         label.textContent = live ? 'Now playing' : (now?.title ? 'Last played' : 'Not playing');
         label.className = live ? 'agate agate--accent' : 'agate agate--faint';
@@ -209,7 +226,9 @@ function renderNowPlaying(section, now) {
     const fit = () => {
         const viewport = track.parentElement;
         const first = track.firstElementChild;
+    
         if (!viewport || !first) return;
+    
         track.classList.toggle('is-static', first.getBoundingClientRect().width <= viewport.clientWidth);
     };
 
@@ -290,9 +309,13 @@ function renderOsu(section, d) {
 
 function progressLabel(entry) {
     const { done, total, unit } = entry;
+    
     if (Number.isFinite(done) && done > 0 && total) return `${nf.format(done)} of ${nf.format(total)} ${unit}`;
+    
     if (total) return `${nf.format(total)} ${unit}`;
+    
     if (Number.isFinite(done) && done > 0) return `${nf.format(done)} ${unit}`;
+    
     return 'Ongoing';
 }
 
@@ -317,6 +340,7 @@ const malRow = (dateField) => (e, i) => {
 
 function renderList(section, d) {
     const inProgress = section.dataset.source === 'anime' ? d.watching : d.reading;
+    
     rows(slot(section, 'current'), inProgress?.slice(0, 5), malRow('started'));
     rows(slot(section, 'completed'), d.completed?.slice(0, 5), malRow('finished'));
 }
@@ -332,20 +356,26 @@ const RENDERERS = {
 
 async function loadStats() {
     const status = document.getElementById('wire-status');
+    
     let payload = null;
 
     try {
         const res = await fetch('/api/stats', { headers: { accept: 'application/json' } });
+    
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    
         payload = await res.json();
     } catch (err) {
         console.warn('[stats] unavailable:', err.message);
+    
         if (status) {
             status.textContent = 'Unavailable';
             status.className = 'wire wire--down';
             status.removeAttribute('data-state');
         }
+    
         document.querySelectorAll('[data-source]').forEach((s) => setState(s, 'error'));
+    
         return;
     }
 
@@ -354,6 +384,7 @@ async function loadStats() {
 
     if (status) {
         status.removeAttribute('data-state');
+    
         if (live === sections.length) {
             status.textContent = 'Live';
             status.className = 'wire wire--live';
@@ -369,6 +400,7 @@ async function loadStats() {
     applyBindings(payload);
 
     const musicNote = document.querySelector('[data-slot="music-note"]');
+    
     if (musicNote && payload.sound?.ok) {
         musicNote.textContent = payload.sound.totals?.capped
             ? 'Minutes, last 50 plays'
@@ -378,12 +410,15 @@ async function loadStats() {
     sections.forEach((section) => {
         const key = section.dataset.source;
         const data = payload[key];
+    
         setState(section, data?.state || (data?.ok ? 'live' : 'error'));
+    
         if (data?.ok) RENDERERS[key]?.(section, data);
         else section.querySelectorAll('[data-empty]').forEach(emptyNotice);
     });
 
     const generated = document.getElementById('generated');
+    
     if (generated && payload.generated) {
         const d = new Date(payload.generated);
         generated.textContent = d.toLocaleString('en-GB', {
@@ -396,14 +431,19 @@ async function loadStats() {
 
 function pollNowPlaying() {
     const section = document.querySelector('[data-source="sound"]');
+    
     if (!section) return;
 
     const tick = async () => {
         if (document.hidden) return;
+    
         try {
             const res = await fetch('/api/spotify?now=1', { headers: { accept: 'application/json' } });
+    
             if (!res.ok) return;
+    
             const data = await res.json();
+    
             if (data?.ok) renderNowPlaying(section, data.now);
         } catch {  }
     };
@@ -413,11 +453,14 @@ function pollNowPlaying() {
 
 async function loadJournal() {
     const host = document.querySelector('[data-slot="journal"]');
+    
     if (!host) return;
 
     try {
         const res = await fetch('/posts/index.json');
+    
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    
         const entries = (await res.json())
             .filter((e) => !e.draft)
             .sort((a, b) => parseDate(b.date) - parseDate(a.date))

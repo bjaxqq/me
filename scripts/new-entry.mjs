@@ -11,6 +11,7 @@ const title = argv.find((a) => !a.startsWith('--'));
 
 if (!title) {
     console.error('\n  Give it a title:\n    node scripts/new-entry.mjs "On keeping count"\n');
+
     process.exit(1);
 }
 
@@ -37,7 +38,9 @@ const file = join(POSTS, `${slug}.md`);
 
 try {
     await access(file);
+
     console.error(`\n  posts/${slug}.md already exists. Pick another title or pass --slug.\n`);
+
     process.exit(1);
 } catch {  }
 
@@ -53,6 +56,7 @@ const entry = {
 };
 
 const index = JSON.parse(await readFile(INDEX, 'utf8'));
+
 index.unshift(entry);
 index.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 

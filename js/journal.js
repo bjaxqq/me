@@ -24,9 +24,12 @@ function entryRow(entry, i) {
 
 function render(entries) {
     const byYear = new Map();
+    
     entries.forEach((e) => {
         const y = yearOf(e.date);
+    
         if (!byYear.has(y)) byYear.set(y, []);
+    
         byYear.get(y).push(e);
     });
 
@@ -40,6 +43,7 @@ function render(entries) {
         `).join('');
 
     const count = document.getElementById('jcount');
+    
     if (count) count.textContent = String(entries.length);
 
     initReveals(host);
@@ -47,6 +51,7 @@ function render(entries) {
 
 async function load() {
     const stamp = document.getElementById('jdate');
+    
     if (stamp) {
         stamp.textContent = new Date().toLocaleDateString('en-GB', {
             day: 'numeric', month: 'long', year: 'numeric',
@@ -55,6 +60,7 @@ async function load() {
 
     try {
         const res = await fetch('/posts/index.json');
+    
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const entries = (await res.json())
@@ -78,6 +84,7 @@ async function load() {
         render(entries);
     } catch (err) {
         console.warn('[journal]', err.message);
+    
         host.innerHTML = `<p class="agate agate--faint" style="padding-block:4rem">Couldn&rsquo;t load the journal.</p>`;
     }
 }

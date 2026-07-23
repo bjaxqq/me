@@ -13,16 +13,19 @@ function currentSlug() {
     const fromPath = location.pathname.replace(/\/+$/, '').split('/').pop();
     const fromQuery = new URLSearchParams(location.search).get('e');
     const slug = fromQuery || fromPath || '';
+
     return /^[a-z0-9][a-z0-9-]*$/i.test(slug) && slug !== 'journal' ? slug : null;
 }
 
 function readingTime(markdown) {
     const words = markdown.trim().split(/\s+/).length;
+
     return `${Math.max(1, Math.round(words / 220))} min read &middot; ${words.toLocaleString('en-US')} words`;
 }
 
 function notFound(message) {
     document.title = 'Not found — Brooks Jackson';
+
     slot('title').textContent = 'Not found';
     slot('dek').textContent = message;
     slot('date').textContent = '—';
@@ -32,6 +35,7 @@ function notFound(message) {
 
 function neighbours(entries, index) {
     const nav = slot('updown');
+
     if (!nav) return;
 
     const older = entries[index + 1];
@@ -52,11 +56,14 @@ function neighbours(entries, index) {
 
 async function load() {
     const slug = currentSlug();
+
     if (!slug) return notFound('No entry was requested.');
 
     let entries = [];
+
     try {
         const res = await fetch('/posts/index.json');
+
         if (res.ok) entries = (await res.json())
             .filter((e) => !e.draft)
             .sort((a, b) => parseDate(b.date) - parseDate(a.date));
@@ -66,10 +73,14 @@ async function load() {
     const meta = index >= 0 ? entries[index] : null;
 
     let markdown;
+
     try {
         const res = await fetch(`/posts/${encodeURIComponent(slug)}.md`);
+
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
         markdown = await res.text();
+        
         if (/^\s*<!DOCTYPE/i.test(markdown)) throw new Error('not an entry');
     } catch {
         return notFound('This entry doesn’t exist.');
@@ -89,6 +100,7 @@ async function load() {
     slot('body').innerHTML = `${render(body)}<div class="article__end"></div>`;
 
     if (index >= 0) neighbours(entries, index);
+    
     initReveals(document);
 }
 

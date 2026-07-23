@@ -8,7 +8,9 @@ function systemPrefersDark() {
 
 export function currentTheme() {
     const set = document.documentElement.getAttribute('data-theme');
+    
     if (set === 'light' || set === 'dark') return set;
+    
     return systemPrefersDark() ? 'dark' : 'light';
 }
 
@@ -17,13 +19,16 @@ export function applyTheme(theme) {
 
     if (theme === 'light' || theme === 'dark') {
         root.setAttribute('data-theme', theme);
+    
         try { localStorage.setItem(KEY, theme); } catch {  }
     } else {
         root.removeAttribute('data-theme');
+    
         try { localStorage.removeItem(KEY); } catch {  }
     }
 
     const tag = meta();
+    
     if (tag) tag.setAttribute('content', currentTheme() === 'dark' ? '#14110f' : '#f4f1ea');
 
     document.querySelectorAll('[data-theme-toggle]').forEach(sync);
@@ -32,6 +37,7 @@ export function applyTheme(theme) {
 function sync(button) {
     const now = currentTheme();
     const next = now === 'dark' ? 'light' : 'dark';
+    
     button.textContent = next === 'dark' ? 'Dark' : 'Light';
     button.setAttribute('aria-label', `Switch to ${next} mode`);
     button.setAttribute('title', `Switch to ${next} mode`);
@@ -39,6 +45,7 @@ function sync(button) {
 
 export function initTheme() {
     const buttons = document.querySelectorAll('[data-theme-toggle]');
+    
     buttons.forEach((button) => {
         sync(button);
         button.addEventListener('click', () => {
@@ -49,7 +56,9 @@ export function initTheme() {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
         if (!document.documentElement.hasAttribute('data-theme')) {
             buttons.forEach(sync);
+    
             const tag = meta();
+    
             if (tag) tag.setAttribute('content', currentTheme() === 'dark' ? '#14110f' : '#f4f1ea');
         }
     });
