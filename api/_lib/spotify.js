@@ -60,11 +60,14 @@ export async function spotify({ nowOnly = false } = {}) {
 
     if (nowOnly) return { now: await nowPlaying(token) };
 
-    const [now, artists, tracks, recent] = await Promise.all([
+    const [now, artists, tracks, recent, profile] = await Promise.all([
         nowPlaying(token),
         reqJson(`${API}/me/top/artists?time_range=short_term&limit=5`, auth).catch(() => ({ items: [] })),
         reqJson(`${API}/me/top/tracks?time_range=short_term&limit=5`, auth).catch(() => ({ items: [] })),
         reqJson(`${API}/me/player/recently-played?limit=50`, auth).catch(() => ({ items: [] })),
+        // There is no username in config — a Spotify profile URL needs the
+        // opaque account id, which only /me can supply.
+        reqJson(`${API}/me`, auth).catch(() => null),
     ]);
 
     const plays = recent.items || [];
@@ -100,6 +103,7 @@ export async function spotify({ nowOnly = false } = {}) {
     }));
 
     return {
+        profileUrl: profile?.external_urls?.spotify || null,
         now: last,
         artists: topArtists,
         tracks: (tracks.items || []).map((t) => ({

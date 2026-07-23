@@ -340,9 +340,39 @@ const malRow = (dateField) => (e, i) => {
 
 function renderList(section, d) {
     const inProgress = section.dataset.source === 'anime' ? d.watching : d.reading;
-    
+
     rows(slot(section, 'current'), inProgress?.slice(0, 5), malRow('started'));
     rows(slot(section, 'completed'), d.completed?.slice(0, 5), malRow('finished'));
+}
+
+/* --- Profile links --------------------------------------------------------- */
+
+/** osu! nests its profile URL under user.url rather than a top-level field. */
+function profileUrl(key, data) {
+    if (key === 'osu') return data?.user?.url || null;
+    return data?.profileUrl || null;
+}
+
+/**
+ * Every panel heading is an inert <a data-profile="..."> until real data
+ * arrives — no href, no hover state, nothing to click. Once a source is
+ * live it becomes an actual link out to that profile; a source that never
+ * connects stays plain text forever, rather than linking nowhere.
+ */
+function linkProfiles(payload) {
+    document.querySelectorAll('[data-profile]').forEach((a) => {
+        const key = a.dataset.profile;
+        const data = payload[key];
+        const url = data?.ok ? profileUrl(key, data) : null;
+
+        if (url) {
+            a.href = url;
+            a.classList.add('link');
+        } else {
+            a.removeAttribute('href');
+            a.classList.remove('link');
+        }
+    });
 }
 
 const RENDERERS = {
@@ -410,12 +440,14 @@ async function loadStats() {
     sections.forEach((section) => {
         const key = section.dataset.source;
         const data = payload[key];
-    
+
         setState(section, data?.state || (data?.ok ? 'live' : 'error'));
-    
+
         if (data?.ok) RENDERERS[key]?.(section, data);
         else section.querySelectorAll('[data-empty]').forEach(emptyNotice);
     });
+
+    linkProfiles(payload);
 
     const generated = document.getElementById('generated');
     

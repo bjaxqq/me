@@ -93,6 +93,7 @@ export async function mal() {
     return {
         user: cfg.user,
         anime: {
+            profileUrl: `https://myanimelist.net/animelist/${encodeURIComponent(cfg.user)}`,
             watching: anime.watching.slice(0, 5),
             completed: anime.completed.slice(0, 5),
             totals: {
@@ -102,6 +103,7 @@ export async function mal() {
             },
         },
         manga: {
+            profileUrl: `https://myanimelist.net/mangalist/${encodeURIComponent(cfg.user)}`,
             reading: manga.reading.slice(0, 5),
             completed: manga.completed.slice(0, 5),
             totals: {

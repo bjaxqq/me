@@ -73,6 +73,7 @@ export async function letterboxd() {
     const year = new Date().getFullYear();
 
     return {
+        profileUrl: `https://letterboxd.com/${user}/`,
         recent: recent.slice(0, 10),
         totals: {
             total: totals.total,

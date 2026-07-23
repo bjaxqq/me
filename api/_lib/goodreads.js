@@ -89,6 +89,7 @@ export async function goodreads() {
     const hasManual = Number.isFinite(manual) && manual > 0;
 
     return {
+        profileUrl: `https://www.goodreads.com/user/show/${encodeURIComponent(cfg.userId)}`,
         reading: reading.slice(0, 3).map((b, i) => {
             const live = matchProgress(progressByTitle, b.title);
             return {
